@@ -1,0 +1,1707 @@
+function_types:
+    date_formatter: !!python/name:plot.functions.MPLDateformatter ''
+    date_locator: !!python/name:plot.functions.MPLDatelocator ''
+    ticker_locator: !!python/name:plot.functions.MPLTickerlocator ''
+    axes_inheritor: !!python/name:plot.functions.MPLAxesInheritance ''
+    axes_kwargs: !!python/name:plot.functions.ImplementAxesKwargs ''
+    axis_kwargs: !!python/name:plot.functions.ImplementAxisKwargs ''
+    plot_legend: !!python/name:plot.functions.AxesLegend ''
+    plot_fill_between: !!python/name:plot.functions.FillBetween ''
+    plot_basic: !!python/name:plot.functions.BasicPlot ''
+    update_axes_label: !!python/name:plot.functions.UpdateAxesLabel ''
+
+algaware:
+    default_plot_settings:
+        marker:
+            function: plot_basic
+            kwargs: 
+                marker: "o"
+                markersize: 4
+                linestyle: "None"
+                color: green
+                zorder: 3
+                label: "Current year´s Chl-a data (0-20 m)"
+            style: marker
+        line:
+            function: plot_basic
+            kwargs: 
+                linestyle: "-"
+                linewidth: 1
+                alpha: 0.9
+                color: blue
+                zorder: 2
+            style: line
+        std_dev:
+            function: plot_fill_between
+            kwargs: 
+                alpha: 0.3
+                color: gray
+                zorder: 1
+            style: fill_between
+        legend:
+            function: plot_legend
+            kwargs: 
+                loc: "lower left"
+                bbox_to_anchor: [-0.02, -0.65]
+            style: legend
+    figures:
+        The Kattegat and The Sound:
+            axes:
+                '6':
+                    statn_nom: "W LANDSKRONA"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 21
+                    row_span: 6
+                    x_axis:
+                        parent: true
+                        set_xlim: 
+                            args: [[0,10]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: xlim
+                        major_locator: 
+                            args: [[0,2,4,6,8,10]]
+                            function: ticker_locator
+                            kwargs: {}
+                            style: fixed_ticker
+                        set_xlabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: xlabel
+                    y_axis:
+                        parent: true
+                        set_ylim: 
+                            args: [[50,0]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylim
+                        set_yticks: 
+                            args: [[50,40,30,20,10,0]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: yticks
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                            kwargs:
+                                label: "Chlorophyll a"
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                label: "CTD fluorescence"
+                                color: "green"
+                        legend: 
+                            kwargs:
+                                bbox_to_anchor: [-0.04, -0.65]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '7':
+                    statn_nom: "W LANDSKRONA"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 21
+                    row_span: 6
+                    x_axis:
+                        major_locator:
+                            args: []
+                            function: date_locator
+                            kwargs: {}
+                            style: month
+                        minor_locator:
+                            args: []
+                            function: date_locator
+                            kwargs:
+                                bymonthday: 16
+                            style: month
+                        major_formatter:
+                            args:
+                            - ''
+                            function: date_formatter
+                            kwargs: {}
+                            style: date
+                        minor_formatter:
+                            args:
+                            - '%b'
+                            function: date_formatter
+                            kwargs: {}
+                            style: date
+                        parent: true
+                    y_axis:
+                        parent: true
+                        set_ylim: 
+                            args: [[0,13]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylim
+                        set_yticks: 
+                            args: [[0,2,4,6,8,10,12]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: yticks
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: W Landskrona"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                            kwargs:
+                                label: "Monthly Chl-a averages 0-20 m (2001-2015)"
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                            kwargs:
+                                label: "Monthly Chl-a averages +/- standard dev."
+                        legend: true
+                '0':
+                    statn_nom: "FLADEN"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 0
+                    row_span: 6
+                    x_axis:
+                        share_with: '6'
+                    y_axis:
+                        share_with: '6'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '1':
+                    statn_nom: "FLADEN"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 0
+                    row_span: 6
+                    x_axis:
+                        share_with: '7'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '7'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: Fladen"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                '2':
+                    statn_nom: "N14 FALKENBERG"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 7
+                    row_span: 6
+                    x_axis:
+                        share_with: '6'
+                    y_axis:
+                        share_with: '6'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '3':
+                    statn_nom: "N14 FALKENBERG"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 7
+                    row_span: 6
+                    x_axis:
+                        share_with: '7'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '7'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: N14 Falkenberg"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                '4':
+                    statn_nom: "ANHOLT E"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 14
+                    row_span: 6
+                    x_axis:
+                        share_with: '6'
+                    y_axis:
+                        share_with: '6'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            secondary: true
+                            kwargs:
+                                color: "green"
+                            secondary_kwargs:
+                                color: "green"
+                                linestyle: ":"
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                            secondary_kwargs:
+                                marker: "v"
+                            secondary: true
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '5':
+                    statn_nom: "ANHOLT E"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 14
+                    row_span: 6
+                    x_axis:
+                        share_with: '7'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '7'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: Anholt E"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+            setup:
+                size: [8.27, 11.69]
+                subplot_grid: [30, 27]
+        The Eastern Baltic:
+            axes:
+                '6':
+                    statn_nom: "BY20 FÅRÖDJ"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 21
+                    row_span: 6
+                    x_axis:
+                        parent: true
+                        set_xlim: 
+                            args: [[0,10]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: xlim
+                        major_locator: 
+                            args: [[0,2,4,6,8,10]]
+                            function: ticker_locator
+                            kwargs: {}
+                            style: fixed_ticker
+                        set_xlabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: xlabel
+                    y_axis:
+                        parent: true
+                        set_ylim: 
+                            args: [[50,0]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylim
+                        set_yticks: 
+                            args: [[50,40,30,20,10,0]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: yticks
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel                    
+                    plot:
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                            kwargs:
+                                label: "Chlorophyll a"
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                label: "CTD fluorescence"
+                                color: "green"
+                        legend: 
+                            kwargs:
+                                bbox_to_anchor: [-0.04, -0.65]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '7':
+                    statn_nom: "BY20 FÅRÖDJ"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 21
+                    row_span: 6
+                    x_axis:
+                        major_locator:
+                            args: []
+                            function: date_locator
+                            kwargs: {}
+                            style: month
+                        minor_locator:
+                            args: []
+                            function: date_locator
+                            kwargs:
+                                bymonthday: 16
+                            style: month
+                        major_formatter:
+                            args:
+                            - ''
+                            function: date_formatter
+                            kwargs: {}
+                            style: date
+                        minor_formatter:
+                            args:
+                            - '%b'
+                            function: date_formatter
+                            kwargs: {}
+                            style: date
+                        parent: true
+                    y_axis:
+                        parent: true
+                        set_ylim: 
+                            args: [[0,13]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylim
+                        set_yticks: 
+                            args: [[0,2,4,6,8,10,12]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: yticks
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: BY20 Fårö Deep"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                            kwargs:
+                                label: "Monthly Chl-a averages 0-20 m (2001-2015)"
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                            kwargs:
+                                label: "Monthly Chl-a averages +/- standard dev."
+                        legend: true
+                '0':
+                    statn_nom: "BCS III-10"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 0
+                    row_span: 6
+                    x_axis:
+                        share_with: '6'
+                    y_axis:
+                        share_with: '6'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '1':
+                    statn_nom: "BCS III-10"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 0
+                    row_span: 6
+                    x_axis:
+                        share_with: '7'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '7'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: BCS III-10"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                        invisible_major: true
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]                            
+                '2':
+                    statn_nom: "BY10"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 7
+                    row_span: 6
+                    x_axis:
+                        share_with: '6'
+                    y_axis:
+                        share_with: '6'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '3':
+                    statn_nom: "BY10"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 7
+                    row_span: 6
+                    x_axis:
+                        share_with: '7'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '7'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: BY10"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                '4':
+                    statn_nom: "BY15 GOTLANDSDJ"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 14
+                    row_span: 6
+                    x_axis:
+                        share_with: '6'
+                    y_axis:
+                        share_with: '6'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '5':
+                    statn_nom: "BY15 GOTLANDSDJ"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 14
+                    row_span: 6
+                    x_axis:
+                        share_with: '7'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '7'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: BY15 Gotland Deep"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+            setup:
+                size: [8.27, 11.69]
+                subplot_grid: [30, 27]
+        The Southern Baltic:
+            axes:
+                '6':
+                    statn_nom: "BY5 BORNHOLMSDJ"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 21
+                    row_span: 6
+                    x_axis:
+                        parent: true
+                        set_xlim: 
+                            args: [[0,10]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: xlim
+                        major_locator: 
+                            args: [[0,2,4,6,8,10]]
+                            function: ticker_locator
+                            kwargs: {}
+                            style: fixed_ticker
+                        set_xlabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: xlabel
+                    y_axis:
+                        parent: true
+                        set_ylim: 
+                            args: [[50,0]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylim
+                        set_yticks: 
+                            args: [[50,40,30,20,10,0]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: yticks
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel                    
+                    plot:
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                            kwargs:
+                                label: "Chlorophyll a"
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                label: "CTD fluorescence"
+                                color: "green"
+                        legend: 
+                            kwargs:
+                                bbox_to_anchor: [-0.04, -0.65]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '7':
+                    statn_nom: "BY5 BORNHOLMSDJ"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 21
+                    row_span: 6
+                    x_axis:
+                        major_locator:
+                            args: []
+                            function: date_locator
+                            kwargs: {}
+                            style: month
+                        minor_locator:
+                            args: []
+                            function: date_locator
+                            kwargs:
+                                bymonthday: 16
+                            style: month
+                        major_formatter:
+                            args:
+                            - ''
+                            function: date_formatter
+                            kwargs: {}
+                            style: date
+                        minor_formatter:
+                            args:
+                            - '%b'
+                            function: date_formatter
+                            kwargs: {}
+                            style: date
+                        parent: true
+                    y_axis:
+                        parent: true
+                        set_ylim: 
+                            args: [[0,13]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylim
+                        set_yticks: 
+                            args: [[0,2,4,6,8,10,12]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: yticks
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: BY5 Bornholm Deep"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                            kwargs:
+                                label: "Monthly Chl-a averages 0-20 m (2001-2015)"
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                            kwargs:
+                                label: "Monthly Chl-a averages +/- standard dev."
+                        legend: true
+                '0':
+                    statn_nom: "BY1"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 0
+                    row_span: 6
+                    x_axis:
+                        share_with: '6'
+                    y_axis:
+                        share_with: '6'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '1':
+                    statn_nom: "BY1"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 0
+                    row_span: 6
+                    x_axis:
+                        share_with: '7'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '7'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: BY1"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                '2':
+                    statn_nom: "BY2 ARKONA"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 7
+                    row_span: 6
+                    x_axis:
+                        share_with: '6'
+                    y_axis:
+                        share_with: '6'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '3':
+                    statn_nom: "BY2 ARKONA"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 7
+                    row_span: 6
+                    x_axis:
+                        share_with: '7'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '7'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: BY2 Arkona"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                '4':
+                    statn_nom: "BY4 CHRISTIANSÖ"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 14
+                    row_span: 6
+                    x_axis:
+                        share_with: '6'
+                    y_axis:
+                        share_with: '6'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '5':
+                    statn_nom: "BY4 CHRISTIANSÖ"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 14
+                    row_span: 6
+                    x_axis:
+                        share_with: '7'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '7'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: BY4 Christiansö"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+            setup:
+                size: [8.27, 11.69]
+                subplot_grid: [30, 27]
+        The Skagerrak:
+            axes:
+                '8':
+                    statn_nom: "P2"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 24
+                    row_span: 5
+                    x_axis:
+                        parent: true
+                        set_xlim: 
+                            args: [[0,10]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: xlim
+                        major_locator: 
+                            args: [[0,2,4,6,8,10]]
+                            function: ticker_locator
+                            kwargs: {}
+                            style: fixed_ticker
+                        set_xlabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: xlabel
+                    y_axis:
+                        parent: true
+                        set_ylim: 
+                            args: [[50,0]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylim
+                        set_yticks: 
+                            args: [[50,40,30,20,10,0]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: yticks
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel                    
+                    plot:
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                            kwargs:
+                                label: "Chlorophyll a"
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                label: "CTD fluorescence"
+                                color: "green"
+                        legend: 
+                            kwargs:
+                                bbox_to_anchor: [-0.04, -0.65]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '9':
+                    statn_nom: "P2"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 24
+                    row_span: 5
+                    x_axis:
+                        major_locator:
+                            args: []
+                            function: date_locator
+                            kwargs: {}
+                            style: month
+                        minor_locator:
+                            args: []
+                            function: date_locator
+                            kwargs:
+                                bymonthday: 16
+                            style: month
+                        major_formatter:
+                            args:
+                            - ''
+                            function: date_formatter
+                            kwargs: {}
+                            style: date
+                        minor_formatter:
+                            args:
+                            - '%b'
+                            function: date_formatter
+                            kwargs: {}
+                            style: date
+                        parent: true
+                    y_axis:
+                        parent: true
+                        set_ylim: 
+                            args: [[0,20]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylim
+                        set_yticks: 
+                            args: [[0,5,10,15,20]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: yticks
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: P2"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                            kwargs:
+                                label: "Monthly Chl-a averages 0-20 m (2001-2015)"
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                            kwargs:
+                                label: "Monthly Chl-a averages +/- standard dev."
+                        legend: true
+                '0':
+                    statn_nom: "Å17"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 0
+                    row_span: 5
+                    x_axis:
+                        share_with: '8'
+                    y_axis:
+                        share_with: '8'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '1':
+                    statn_nom: "Å17"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 0
+                    row_span: 5
+                    x_axis:
+                        share_with: '9'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '9'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: Å17"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                '2':
+                    statn_nom: "Å15"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 6
+                    row_span: 5
+                    x_axis:
+                        share_with: '8'
+                    y_axis:
+                        share_with: '8'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '3':
+                    statn_nom: "Å15"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 6
+                    row_span: 5
+                    x_axis:
+                        share_with: '9'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '9'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: Å15"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                '4':
+                    statn_nom: "Å13"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 12
+                    row_span: 5
+                    x_axis:
+                        share_with: '8'
+                    y_axis:
+                        share_with: '8'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '5':
+                    statn_nom: "Å13"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 12
+                    row_span: 5
+                    x_axis:
+                        share_with: '9'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '9'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: Å13"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                '6':
+                    statn_nom: "SLÄGGÖ"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 18
+                    row_span: 5
+                    x_axis:
+                        share_with: '8'
+                    y_axis:
+                        share_with: '8'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '7':
+                    statn_nom: "SLÄGGÖ"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 18
+                    row_span: 5
+                    x_axis:
+                        share_with: '9'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '9'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: Släggö"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+            setup:
+                size: [8.27, 11.69]
+                subplot_grid: [30, 27]
+        The Western Baltic:
+            axes:
+                '4':
+                    statn_nom: "BY32 NORRKÖPING"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 14
+                    row_span: 6
+                    x_axis:
+                        parent: true
+                        set_xlim: 
+                            args: [[0,5]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: xlim
+                        major_locator: 
+                            args: [[0,1,2,3,4,5]]
+                            function: ticker_locator
+                            kwargs: {}
+                            style: fixed_ticker
+                        set_xlabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: xlabel
+                    y_axis:
+                        parent: true
+                        set_ylim: 
+                            args: [[50,0]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylim
+                        set_yticks: 
+                            args: [[50,40,30,20,10,0]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: yticks
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel                    
+                    plot:
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                            kwargs:
+                                label: "Chlorophyll a"
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                label: "CTD fluorescence"
+                                color: "green"
+                        legend: 
+                            kwargs:
+                                bbox_to_anchor: [-0.04, -0.65]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '5':
+                    statn_nom: "BY32 NORRKÖPING"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 14
+                    row_span: 6
+                    x_axis:
+                        major_locator:
+                            args: []
+                            function: date_locator
+                            kwargs: {}
+                            style: month
+                        minor_locator:
+                            args: []
+                            function: date_locator
+                            kwargs:
+                                bymonthday: 16
+                            style: month
+                        major_formatter:
+                            args:
+                            - ''
+                            function: date_formatter
+                            kwargs: {}
+                            style: date
+                        minor_formatter:
+                            args:
+                            - '%b'
+                            function: date_formatter
+                            kwargs: {}
+                            style: date
+                        parent: true
+                    y_axis:
+                        parent: true
+                        set_ylim: 
+                            args: [[0,13]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylim
+                        set_yticks: 
+                            args: [[0,2,4,6,8,10,12]]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: yticks
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: BY32 Norrköping Deep"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                            kwargs:
+                                label: "Monthly Chl-a averages 0-20 m (2001-2015)"
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                            kwargs:
+                                label: "Monthly Chl-a averages +/- standard dev."
+                        legend: true
+                '0':
+                    statn_nom: "REF M1V1"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 0
+                    row_span: 6
+                    x_axis:
+                        share_with: '4'
+                    y_axis:
+                        share_with: '4'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            secondary: true
+                            kwargs:
+                                color: "green"
+                            secondary_kwargs:
+                                color: "green"
+                                linestyle: ":"
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                            secondary_kwargs:
+                                marker: "v"
+                            secondary: true
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '1':
+                    statn_nom: "REF M1V1"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 0
+                    row_span: 6
+                    x_axis:
+                        share_with: '5'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '5'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: REF M1V1"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                '2':
+                    statn_nom: "BY38 KARLSÖDJ"
+                    col_pos: 0
+                    col_span: 6
+                    row_pos: 7
+                    row_span: 6
+                    x_axis:
+                        share_with: '4'
+                    y_axis:
+                        share_with: '4'
+                        set_ylabel: 
+                            args: ["Depth (m)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    plot:
+                        line:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            kwargs:
+                                color: "green"
+                        marker:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                    update_axes:
+                        set_ylabel: 
+                            data_key: sdate
+                            function: update_axes_label
+                            kwargs: {}
+                            style: ylabel
+                '3':
+                    statn_nom: "BY38 KARLSÖDJ"
+                    col_pos: 9
+                    col_span: 18
+                    row_pos: 7
+                    row_span: 6
+                    x_axis:
+                        share_with: '5'
+                        invisible_major: true
+                    y_axis:
+                        share_with: '5'
+                        set_ylabel: 
+                            args: ["Chl-a (µg/l)"]
+                            function: axis_kwargs
+                            kwargs: {}
+                            style: ylabel
+                    axes_setting:
+                        set_title:
+                            args:
+                                - "Station: BY38 Karlsö Deep"
+                            kwargs:
+                                fontsize: 10
+                            style: title
+                            function: axes_kwargs
+                    plot:
+                        std_dev:
+                            data_type: statistics
+                            data_keys: [datetime, std_low, std_hi]
+                        line:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
+                        marker:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+            setup:
+                size: [8.27, 11.69]
+                subplot_grid: [30, 27]
