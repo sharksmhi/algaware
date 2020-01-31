@@ -9,9 +9,14 @@ import numpy as np
 import pandas as pd
 from datetime import datetime as dt
 
-from .boolian_base import StatBooleanBase
-import readers
-from .interpolate import get_interpolated_df
+try:
+    from .boolean_base import StatBooleanBase
+    from .. import readers
+    from .interpolate import get_interpolated_df
+except:
+    from boolean_base import StatBooleanBase
+    import readers
+    from interpolate import get_interpolated_df
 
 
 class StatisticsHandler(StatBooleanBase):
@@ -19,7 +24,7 @@ class StatisticsHandler(StatBooleanBase):
     """
     def __init__(self, statpath=''):
         super().__init__()
-        self.data = readers.load_txt(statpath, as_dtype=False, fill_nan=np.nan)
+        self.data = readers.txt_reader.load_txt(statpath, as_dtype=False, fill_nan=np.nan)
         float_columns = self.data.keys()[3:]
         self.data.loc[:, float_columns] = self.data.loc[:, float_columns].astype(float)
 

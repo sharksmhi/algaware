@@ -10,11 +10,16 @@ import pandas as pd
 import numpy as np
 import sys
 sys.path.append('C:/Utveckling/ctdpy')
+sys.path.append('C:/Utveckling/sharkpylib')
 import ctdpy
+from sharkpylib.sharkint.reader import SHARKintReader
 sys.path.remove('C:/Utveckling/ctdpy')
+sys.path.remove('C:/Utveckling/sharkpylib')
 
-import data_core
-from .boolian_base import MeanDataBooleanBase
+try:
+    from .boolean_base import MeanDataBooleanBase
+except:
+    from boolean_base import MeanDataBooleanBase
 
 
 class CTDDataHandler(object):
@@ -25,12 +30,12 @@ class CTDDataHandler(object):
         if not base_directory:
             # ONLY FOR TESTING
             # base_directory = '//winfs-proj/proj/havgem/EXPRAPP/Exprap2019/Aranda v45-46 November/CTD/CNV/'
-            base_directory = '//winfs-proj/proj/havgem/EXPRAPP/Exprap2019/Aranda v42 okt/ctd/cnv/'
-        files = ctdpy.core.utils.generate_filepaths(base_directory,
-                                                    endswith='.cnv',
-                                                    )
-        self.ctd_session = ctdpy.core.session.Session(reader='smhi',
-                                                      filepaths=files)
+            base_directory = '//winfs-proj/proj/havgem/EXPRAPP/Exprap2020/Svea v2-3/ctd/data/'
+        files = ctdpy.ctdpy_core.utils.generate_filepaths(base_directory,
+                                                          endswith='.cnv',
+                                                          only_from_dir=True)
+        self.ctd_session = ctdpy.ctdpy_core.session.Session(reader='smhi',
+                                                            filepaths=files)
         self.fid_mapping = {}
 
     def load_data(self):
@@ -71,7 +76,7 @@ class CTDDataHandler(object):
         :return:
         """
         for fid in self.data.keys():
-            myear = str(ctdpy.core.utils.get_timestamp(self.data[fid]['metadata'].get('SDATE')).year)
+            myear = str(ctdpy.ctdpy_core.utils.get_timestamp(self.data[fid]['metadata'].get('SDATE')).year)
             shipc = self.ctd_session.settings.smap.map_shipc(self.data[fid]['metadata'].get('SHIPC'))
             serno = self.data[fid]['metadata'].get('SERNO')
             key = '_'.join([myear, shipc, serno])
@@ -88,9 +93,9 @@ class SHARKintDataHandler(MeanDataBooleanBase):
         self.start_time = start_time
         self.end_time = end_time
         self.smap = ship_mapper
-        self.si_session = data_core.SHARKintData('prod',
-                                                 # start_date=start_time.strftime('%Y%m%d'), end_date=end_time.strftime('%Y%m%d'),
-                                                 year=self.start_time.year)
+        self.si_session = SHARKintReader('prod',
+                                         # start_date=start_time.strftime('%Y%m%d'), end_date=end_time.strftime('%Y%m%d'),
+                                         year=self.start_time.year)
         self._key_list = None
 
     def get_key_data(self, key):
@@ -195,9 +200,10 @@ class SHARKintDataHandler(MeanDataBooleanBase):
 class DataHandler(object):
     """
     """
-    def __init__(self, start_time=None, end_time=None):
+    def __init__(self, start_time=None, end_time=None, settings=None):
         self.start_time = start_time
         self.end_time = end_time
+        self.settings = settings
 
         #TODO use some sort of settings object to get data sources
         self.ctd_handler = CTDDataHandler()
@@ -209,6 +215,72 @@ class DataHandler(object):
 
         self.data_dict = {}
         self._station_key_map = None
+
+    def get_station_data_information(self):
+        df = pd.DataFrame([], columns=['Station', 'Statistics', 'BTL-data', 'CTD-data', 'Dates'])
+        df['Station'] = self.settings.standard_stations['standard_stations'].get('station_list')
+        for i, statn in enumerate(df['Station']):
+            key = self.station_key_map.get(statn)
+            btl_check = self._check_for_btl_data(key)
+            ctd_check = self._check_for_ctd_data(key)
+            date_check = self._check_for_dates(key)
+
+            df['BTL-data'][i] = btl_check
+            df['CTD-data'][i] = ctd_check
+            df['Dates'][i] = date_check
+            df['Statistics'][i] = 'x'
+
+        return df
+
+    def _check_for_btl_data(self, visit_key):
+        """
+        Checking for BTL-data (profile)
+        :param visit_key:
+        :return:
+        """
+        if not type(visit_key) is list:
+            visit_key = [visit_key]
+        if not any(visit_key):
+            return ''
+
+        x_list = []
+        for key in visit_key:
+            if self.data_dict[key]['sharkint_profile']['CHLA'].any():
+                x_list.append('x')
+        return ''.join(x_list)
+
+    def _check_for_ctd_data(self, visit_key):
+        """
+        :param visit_key:
+        :return:
+        """
+        if not type(visit_key) is list:
+            visit_key = [visit_key]
+        if not any(visit_key):
+            return ''
+
+        x_list = []
+        for key in visit_key:
+            if self.data_dict[key]['ctd']['CHLFLUO_CTD'].any():
+                x_list.append('x')
+        return ''.join(x_list)
+
+    def _check_for_dates(self, visit_key):
+        """
+        Checking for BTL-data (profile)
+        :param visit_key:
+        :return:
+        """
+        if not type(visit_key) is list:
+            visit_key = [visit_key]
+        if not any(visit_key):
+            return ''
+
+        date_list = []
+        for key in visit_key:
+            date_list.append(self.data_dict[key]['sdate'])
+
+        return ', '.join(date_list)
 
     def load_all_data_sources(self):
         """
@@ -242,11 +314,20 @@ class DataHandler(object):
         :return:
         """
         print('Adding annual statistics to data source..')
+        added_stations = {}
         for key in self.data_dict:
-            stat_data = stat_obj.get_hi_lo_std(self.data_dict[key].get('station'),
-                                               'CHLA',
-                                               current_year=str(self.data_dict[key]['datetime'].year))
+            statn = self.data_dict[key].get('station')
+            added_stations[statn] = True
+            current_year = str(self.data_dict[key]['datetime'].year)
+            stat_data = stat_obj.get_hi_lo_std(statn, 'CHLA', current_year=current_year)
             self.data_dict[key]['statistics'] = stat_obj.get_interpolated_data(stat_data)
+
+        # print('self.data_dict.keys()', self.data_dict.keys())
+        for statn in self.settings.standard_stations['standard_stations'].get('station_list'):
+            if statn not in added_stations:
+                stat_data = stat_obj.get_hi_lo_std(statn, 'CHLA', current_year=current_year)
+                self.data_dict[statn] = {'statistics': stat_obj.get_interpolated_data(stat_data)}
+
         print('statistics added to data source')
 
     @property

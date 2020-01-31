@@ -1,34 +1,58 @@
 function_types:
-    date_formatter: !!python/name:plot.functions.MPLDateformatter ''
-    date_locator: !!python/name:plot.functions.MPLDatelocator ''
-    ticker_locator: !!python/name:plot.functions.MPLTickerlocator ''
-    axes_inheritor: !!python/name:plot.functions.MPLAxesInheritance ''
-    axes_kwargs: !!python/name:plot.functions.ImplementAxesKwargs ''
-    axis_kwargs: !!python/name:plot.functions.ImplementAxisKwargs ''
-    plot_legend: !!python/name:plot.functions.AxesLegend ''
-    plot_fill_between: !!python/name:plot.functions.FillBetween ''
-    plot_basic: !!python/name:plot.functions.BasicPlot ''
-    update_axes_label: !!python/name:plot.functions.UpdateAxesLabel ''
+    date_formatter: !!python/name:algaware.alg_plot.functions.MPLDateformatter ''
+    date_locator: !!python/name:algaware.alg_plot.functions.MPLDatelocator ''
+    ticker_locator: !!python/name:algaware.alg_plot.functions.MPLTickerlocator ''
+    axes_inheritor: !!python/name:algaware.alg_plot.functions.MPLAxesInheritance ''
+    axes_kwargs: !!python/name:algaware.alg_plot.functions.ImplementAxesKwargs ''
+    axis_kwargs: !!python/name:algaware.alg_plot.functions.ImplementAxisKwargs ''
+    plot_legend: !!python/name:algaware.alg_plot.functions.AxesLegend ''
+    plot_fig_legend: !!python/name:algaware.alg_plot.functions.FigureLegend ''
+    plot_fill_between: !!python/name:algaware.alg_plot.functions.FillBetween ''
+    plot_basic: !!python/name:algaware.alg_plot.functions.BasicPlot ''
+    update_axes_label: !!python/name:algaware.alg_plot.functions.UpdateAxesLabel ''
 
 algaware:
     default_plot_settings:
-        marker:
+        marker_left:
             function: plot_basic
             kwargs: 
                 marker: "o"
                 markersize: 4
                 linestyle: "None"
                 color: green
+                clip_on: False
+                zorder: 3
+                label: "Chlorophyll a"
+            style: marker
+        line_left:
+            function: plot_basic
+            kwargs: 
+                linestyle: "-"
+                linewidth: 1
+                alpha: 0.9
+                color: green
+                label: "CTD Fluorescence\n(nominally µg/l)"
+                zorder: 2
+            style: line
+        marker_right:
+            function: plot_basic
+            kwargs: 
+                marker: "o"
+                markersize: 4
+                linestyle: "None"
+                color: green
+                clip_on: False
                 zorder: 3
                 label: "Current year´s Chl-a data (0-20 m)"
             style: marker
-        line:
+        line_right:
             function: plot_basic
             kwargs: 
                 linestyle: "-"
                 linewidth: 1
                 alpha: 0.9
                 color: blue
+                label: "Monthly Chl-a averages 0-20 m (2001-2015)"
                 zorder: 2
             style: line
         std_dev:
@@ -36,13 +60,22 @@ algaware:
             kwargs: 
                 alpha: 0.3
                 color: gray
+                label: "Monthly Chl-a averages +/- standard dev."
                 zorder: 1
             style: fill_between
-        legend:
-            function: plot_legend
+        right_legend:
+            function: plot_fig_legend
+            nr_or_handles: 3
+            axes_keys: ["1", "3", "5", "7", "9"]
             kwargs: 
-                loc: "lower left"
-                bbox_to_anchor: [-0.02, -0.65]
+                bbox_to_anchor: [0.138, 0.045, 0.6, 0.1]
+            style: legend
+        left_legend:
+            function: plot_fig_legend
+            nr_or_handles: 2
+            axes_keys: ["0", "2", "4", "6", "8"]
+            kwargs: 
+                bbox_to_anchor: [-0.04, 0.045, 0.35, 0.1]
             style: legend
     figures:
         The Kattegat and The Sound:
@@ -88,20 +121,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
-                            kwargs:
-                                label: "Chlorophyll a"
-                        line:
+                        line_left:
                             data_type: ctd
                             data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                label: "CTD fluorescence"
-                                color: "green"
-                        legend: 
-                            kwargs:
-                                bbox_to_anchor: [-0.04, -0.65]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -165,20 +190,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
-                        marker:
+                        marker_right:
                             data_type: sharkint_surface
                             data_keys: [datetime, CHLA]
-                        line:
+                        line_right:
                             data_type: statistics
                             data_keys: [datetime, mean]
-                            kwargs:
-                                label: "Monthly Chl-a averages 0-20 m (2001-2015)"
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                            kwargs:
-                                label: "Monthly Chl-a averages +/- standard dev."
-                        legend: true
                 '0':
                     statn_nom: "FLADEN"
                     col_pos: 0
@@ -195,14 +215,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
-                        line:
+                        line_left:
                             data_type: ctd
                             data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -234,15 +252,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
                 '2':
                     statn_nom: "N14 FALKENBERG"
                     col_pos: 0
@@ -259,14 +277,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        line:
-                            data_type: ctd
-                            data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
+                        line_left:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -298,15 +314,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
                 '4':
                     statn_nom: "ANHOLT E"
                     col_pos: 0
@@ -323,21 +339,18 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        line:
-                            data_type: ctd
-                            data_keys: [CHLFLUO_CTD, DEPH]
-                            secondary: true
-                            kwargs:
-                                color: "green"
-                            secondary_kwargs:
-                                color: "green"
-                                linestyle: ":"
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
                             secondary_kwargs:
                                 marker: "v"
                             secondary: true
+                        line_left:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
+                            secondary: true
+                            secondary_kwargs:
+                                linestyle: ":"
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -369,18 +382,21 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
             setup:
                 size: [8.27, 11.69]
                 subplot_grid: [30, 27]
+                title: The Kattegat and The Sound
+                left_legend: False
+                right_legend: False
         The Eastern Baltic:
             axes:
                 '6':
@@ -424,20 +440,12 @@ algaware:
                             kwargs: {}
                             style: ylabel                    
                     plot:
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
-                            kwargs:
-                                label: "Chlorophyll a"
-                        line:
+                        line_left:
                             data_type: ctd
                             data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                label: "CTD fluorescence"
-                                color: "green"
-                        legend: 
-                            kwargs:
-                                bbox_to_anchor: [-0.04, -0.65]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -501,20 +509,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
-                        marker:
+                        marker_right:
                             data_type: sharkint_surface
                             data_keys: [datetime, CHLA]
-                        line:
+                        line_right:
                             data_type: statistics
                             data_keys: [datetime, mean]
-                            kwargs:
-                                label: "Monthly Chl-a averages 0-20 m (2001-2015)"
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                            kwargs:
-                                label: "Monthly Chl-a averages +/- standard dev."
-                        legend: true
                 '0':
                     statn_nom: "BCS III-10"
                     col_pos: 0
@@ -531,14 +534,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        line:
-                            data_type: ctd
-                            data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
+                        line_left:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -571,15 +572,15 @@ algaware:
                             function: axes_kwargs
                         invisible_major: true
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA] 
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]      
                         std_dev:
                             data_type: statistics
-                            data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]                            
+                            data_keys: [datetime, std_low, std_hi]                     
                 '2':
                     statn_nom: "BY10"
                     col_pos: 0
@@ -596,14 +597,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        line:
-                            data_type: ctd
-                            data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
+                        line_left:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -635,15 +634,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
                 '4':
                     statn_nom: "BY15 GOTLANDSDJ"
                     col_pos: 0
@@ -660,14 +659,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        line:
-                            data_type: ctd
-                            data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
+                        line_left:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -699,18 +696,21 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
             setup:
                 size: [8.27, 11.69]
                 subplot_grid: [30, 27]
+                title: The Eastern Baltic
+                left_legend: False
+                right_legend: False
         The Southern Baltic:
             axes:
                 '6':
@@ -754,20 +754,12 @@ algaware:
                             kwargs: {}
                             style: ylabel                    
                     plot:
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
-                            kwargs:
-                                label: "Chlorophyll a"
-                        line:
+                        line_left:
                             data_type: ctd
                             data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                label: "CTD fluorescence"
-                                color: "green"
-                        legend: 
-                            kwargs:
-                                bbox_to_anchor: [-0.04, -0.65]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -831,20 +823,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
-                        marker:
+                        marker_right:
                             data_type: sharkint_surface
                             data_keys: [datetime, CHLA]
-                        line:
+                        line_right:
                             data_type: statistics
                             data_keys: [datetime, mean]
-                            kwargs:
-                                label: "Monthly Chl-a averages 0-20 m (2001-2015)"
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                            kwargs:
-                                label: "Monthly Chl-a averages +/- standard dev."
-                        legend: true
                 '0':
                     statn_nom: "BY1"
                     col_pos: 0
@@ -861,14 +848,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        line:
-                            data_type: ctd
-                            data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
+                        line_left:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -900,15 +885,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
                 '2':
                     statn_nom: "BY2 ARKONA"
                     col_pos: 0
@@ -925,14 +910,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        line:
-                            data_type: ctd
-                            data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
+                        line_left:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -964,15 +947,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
                 '4':
                     statn_nom: "BY4 CHRISTIANSÖ"
                     col_pos: 0
@@ -989,14 +972,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        line:
-                            data_type: ctd
-                            data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
+                        line_left:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -1028,18 +1009,21 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
             setup:
                 size: [8.27, 11.69]
                 subplot_grid: [30, 27]
+                title: The Southern Baltic
+                left_legend: False
+                right_legend: False
         The Skagerrak:
             axes:
                 '8':
@@ -1083,20 +1067,12 @@ algaware:
                             kwargs: {}
                             style: ylabel                    
                     plot:
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
-                            kwargs:
-                                label: "Chlorophyll a"
-                        line:
+                        line_left:
                             data_type: ctd
                             data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                label: "CTD fluorescence"
-                                color: "green"
-                        legend: 
-                            kwargs:
-                                bbox_to_anchor: [-0.04, -0.65]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -1160,20 +1136,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
-                        marker:
+                        marker_right:
                             data_type: sharkint_surface
                             data_keys: [datetime, CHLA]
-                        line:
+                        line_right:
                             data_type: statistics
                             data_keys: [datetime, mean]
-                            kwargs:
-                                label: "Monthly Chl-a averages 0-20 m (2001-2015)"
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                            kwargs:
-                                label: "Monthly Chl-a averages +/- standard dev."
-                        legend: true
                 '0':
                     statn_nom: "Å17"
                     col_pos: 0
@@ -1190,14 +1161,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
-                        line:
+                        line_left:
                             data_type: ctd
                             data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -1229,15 +1198,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
                 '2':
                     statn_nom: "Å15"
                     col_pos: 0
@@ -1254,14 +1223,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
-                        line:
+                        line_left:
                             data_type: ctd
                             data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -1293,15 +1260,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
                 '4':
                     statn_nom: "Å13"
                     col_pos: 0
@@ -1318,14 +1285,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
-                        line:
+                        line_left:
                             data_type: ctd
                             data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -1357,15 +1322,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
                 '6':
                     statn_nom: "SLÄGGÖ"
                     col_pos: 0
@@ -1382,14 +1347,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
-                        line:
+                        line_left:
                             data_type: ctd
                             data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -1421,18 +1384,25 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
             setup:
                 size: [8.27, 11.69]
                 subplot_grid: [30, 27]
+                title: The Skagerrak
+                left_legend: 
+                    kwargs: 
+                        bbox_to_anchor: [-0.04, -0.005, 0.35, 0.1]
+                right_legend:  
+                    kwargs: 
+                        bbox_to_anchor: [0.138, -0.005, 0.6, 0.1]
         The Western Baltic:
             axes:
                 '4':
@@ -1476,20 +1446,12 @@ algaware:
                             kwargs: {}
                             style: ylabel                    
                     plot:
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
-                            kwargs:
-                                label: "Chlorophyll a"
-                        line:
+                        line_left:
                             data_type: ctd
                             data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                label: "CTD fluorescence"
-                                color: "green"
-                        legend: 
-                            kwargs:
-                                bbox_to_anchor: [-0.04, -0.65]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -1553,20 +1515,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
-                        marker:
+                        marker_right:
                             data_type: sharkint_surface
                             data_keys: [datetime, CHLA]
-                        line:
+                        line_right:
                             data_type: statistics
                             data_keys: [datetime, mean]
-                            kwargs:
-                                label: "Monthly Chl-a averages 0-20 m (2001-2015)"
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                            kwargs:
-                                label: "Monthly Chl-a averages +/- standard dev."
-                        legend: true
                 '0':
                     statn_nom: "REF M1V1"
                     col_pos: 0
@@ -1583,21 +1540,19 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        line:
+                        marker_left:
+                            data_type: sharkint_profile
+                            data_keys: [CHLA, DEPH]
+                            secondary: true
+                            secondary_kwargs:
+                                marker: "v"
+                        line_left:
                             data_type: ctd
                             data_keys: [CHLFLUO_CTD, DEPH]
                             secondary: true
-                            kwargs:
-                                color: "green"
                             secondary_kwargs:
                                 color: "green"
                                 linestyle: ":"
-                        marker:
-                            data_type: sharkint_profile
-                            data_keys: [CHLA, DEPH]
-                            secondary_kwargs:
-                                marker: "v"
-                            secondary: true
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -1629,15 +1584,15 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
                 '2':
                     statn_nom: "BY38 KARLSÖDJ"
                     col_pos: 0
@@ -1654,14 +1609,12 @@ algaware:
                             kwargs: {}
                             style: ylabel
                     plot:
-                        line:
-                            data_type: ctd
-                            data_keys: [CHLFLUO_CTD, DEPH]
-                            kwargs:
-                                color: "green"
-                        marker:
+                        marker_left:
                             data_type: sharkint_profile
                             data_keys: [CHLA, DEPH]
+                        line_left:
+                            data_type: ctd
+                            data_keys: [CHLFLUO_CTD, DEPH]
                     update_axes:
                         set_ylabel: 
                             data_key: sdate
@@ -1693,15 +1646,22 @@ algaware:
                             style: title
                             function: axes_kwargs
                     plot:
+                        marker_right:
+                            data_type: sharkint_surface
+                            data_keys: [datetime, CHLA]
+                        line_right:
+                            data_type: statistics
+                            data_keys: [datetime, mean]
                         std_dev:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
-                        line:
-                            data_type: statistics
-                            data_keys: [datetime, mean]
-                        marker:
-                            data_type: sharkint_surface
-                            data_keys: [datetime, CHLA]
             setup:
                 size: [8.27, 11.69]
                 subplot_grid: [30, 27]
+                title: The Western Baltic
+                left_legend: 
+                    kwargs: 
+                        bbox_to_anchor: [-0.04, 0.2, 0.35, 0.1]
+                right_legend:  
+                    kwargs: 
+                        bbox_to_anchor: [0.138, 0.2, 0.6, 0.1]

@@ -6,11 +6,10 @@ Created on 2019-12-02 07:27
 
 """
 import numpy as np
+import pandas as pd
 import datetime
 import pyodbc
 import json
-
-import pandas as pd
 
 
 class SHARKintData(object):
