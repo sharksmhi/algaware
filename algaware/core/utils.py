@@ -197,6 +197,15 @@ def get_datetime_now(fmt='%Y-%m-%d %H:%M:%S'):
     return datetime.now().strftime(fmt)
 
 
+def get_export_folder():
+    alg_path = 'C:\\algaware_exports'
+    date_str = get_datetime_now(fmt='%Y%m%d')
+    export_path = os.path.abspath(os.path.join(alg_path, date_str))
+    if not os.path.isdir(export_path):
+        os.makedirs(export_path)
+    return export_path
+
+
 def get_file_list_based_on_suffix(file_list, suffix):
     """
     Get filenames endinge with "suffix"

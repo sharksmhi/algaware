@@ -9,25 +9,11 @@ import os
 import time
 import pandas as pd
 
-try:
-    from .datahandler import DataHandler
-except:
-    from datahandler import DataHandler
-try:
-    from .statistics import StatisticsHandler
-except:
-    from statistics import StatisticsHandler
-try:
-    from .algaware_config import Settings
-except:
-    from algaware_config import Settings
+from algaware.core.datahandler import DataHandler
+from algaware.core.statistics import StatisticsHandler
+from algaware.core.config import Settings
 
-from algaware import alg_plot
-# from . import alg_plot
-# except:
-#     import SHARKintDataHandler, DataHandler, CTDDataHandler
-#     from . import alg_plot
-#     from . import algaware_config
+from algaware.plot import plot as alg_plot
 
 
 class BaseSession(object):
@@ -103,8 +89,8 @@ class Session(BaseSession):
         :return:
         """
         self.plot_handler = alg_plot.PlotAlgaware(figure_setup=self.figure_handler,
-                                              data=self.data_handler.data_dict,
-                                              station_key_map=self.data_handler.station_key_map)
+                                                  data=self.data_handler.data_dict,
+                                                  station_key_map=self.data_handler.station_key_map)
 
     def initialize_statistic_handler(self):
         """
@@ -170,21 +156,30 @@ if __name__ == '__main__':
     # settings = config.Settings()
 
     s = Session()
-    s.update_attributes(**{'start_time': '2020-01-01',
-                           'end_time': '2020-01-31'})
+    # s.update_attributes(**{'start_time': '2020-01-01',
+    #                        'end_time': '2020-01-31'})
+    s.update_attributes(**{'start_time': '2020-02-01',
+                           'end_time': '2020-02-29'})
     s.initialize_statistic_handler()
     s.initialize_data_handler()
     s.load_data()
 
     s.initialize_figure_handler()
-    s.update_figure_settings('The Skagerrak')
+    # # fig_obj.set_figure_settings('The Skagerrak')
+    # # fig_obj.set_figure_settings('The Kattegat and The Sound')
+    # # fig_obj.set_figure_settings('The Southern Baltic')
+    # # fig_obj.set_figure_settings('The Western Baltic')
+    # fig_obj.set_figure_settings('The Eastern Baltic')
+    # s.update_figure_settings('The Skagerrak')
+    # s.update_figure_settings('The Kattegat and The Sound')
+    # s.update_figure_settings('The Southern Baltic')
+    # s.update_figure_settings('The Western Baltic')
+    s.update_figure_settings('The Eastern Baltic')
 
     s.initialize_plot_handler()
     s.plot_figure()
 
 
-
-    #
     # statpath = 'etc\\statistics\\annual_2001-2015_ctd_temp_salt_statistics.txt'
     # statpath = 'etc\\statistics\\annual_2001-2015_ctd_temp_salt_statistics_chl20m.txt'
     # sh = data_core.StatisticsHandler(statpath=statpath)

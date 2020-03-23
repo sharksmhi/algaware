@@ -1,15 +1,15 @@
 function_types:
-    date_formatter: !!python/name:algaware.alg_plot.functions.MPLDateformatter ''
-    date_locator: !!python/name:algaware.alg_plot.functions.MPLDatelocator ''
-    ticker_locator: !!python/name:algaware.alg_plot.functions.MPLTickerlocator ''
-    axes_inheritor: !!python/name:algaware.alg_plot.functions.MPLAxesInheritance ''
-    axes_kwargs: !!python/name:algaware.alg_plot.functions.ImplementAxesKwargs ''
-    axis_kwargs: !!python/name:algaware.alg_plot.functions.ImplementAxisKwargs ''
-    plot_legend: !!python/name:algaware.alg_plot.functions.AxesLegend ''
-    plot_fig_legend: !!python/name:algaware.alg_plot.functions.FigureLegend ''
-    plot_fill_between: !!python/name:algaware.alg_plot.functions.FillBetween ''
-    plot_basic: !!python/name:algaware.alg_plot.functions.BasicPlot ''
-    update_axes_label: !!python/name:algaware.alg_plot.functions.UpdateAxesLabel ''
+    date_formatter: !!python/name:algaware.plot.functions.MPLDateformatter ''
+    date_locator: !!python/name:algaware.plot.functions.MPLDatelocator ''
+    ticker_locator: !!python/name:algaware.plot.functions.MPLTickerlocator ''
+    axes_inheritor: !!python/name:algaware.plot.functions.MPLAxesInheritance ''
+    axes_kwargs: !!python/name:algaware.plot.functions.ImplementAxesKwargs ''
+    axis_kwargs: !!python/name:algaware.plot.functions.ImplementAxisKwargs ''
+    plot_legend: !!python/name:algaware.plot.functions.AxesLegend ''
+    plot_fig_legend: !!python/name:algaware.plot.functions.FigureLegend ''
+    plot_fill_between: !!python/name:algaware.plot.functions.FillBetween ''
+    plot_basic: !!python/name:algaware.plot.functions.BasicPlot ''
+    update_axes_label: !!python/name:algaware.plot.functions.UpdateAxesLabel ''
 
 algaware:
     default_plot_settings:
@@ -395,8 +395,10 @@ algaware:
                 size: [8.27, 11.69]
                 subplot_grid: [30, 27]
                 title: The Kattegat and The Sound
-                left_legend: False
-                right_legend: False
+                left_legend:
+                    axes_keys: ["0", "2", "4", "6"]
+                right_legend:
+                    axes_keys: ["1", "3", "5", "7"]
         The Eastern Baltic:
             axes:
                 '6':
@@ -709,8 +711,10 @@ algaware:
                 size: [8.27, 11.69]
                 subplot_grid: [30, 27]
                 title: The Eastern Baltic
-                left_legend: False
-                right_legend: False
+                left_legend:
+                    axes_keys: ["0", "2", "4", "6"]
+                right_legend:
+                    axes_keys: ["1", "3", "5", "7"]
         The Southern Baltic:
             axes:
                 '6':
@@ -1022,8 +1026,10 @@ algaware:
                 size: [8.27, 11.69]
                 subplot_grid: [30, 27]
                 title: The Southern Baltic
-                left_legend: False
-                right_legend: False
+                left_legend:
+                    axes_keys: ["0", "2", "4", "6"]
+                right_legend:
+                    axes_keys: ["1", "3", "5", "7"]
         The Skagerrak:
             axes:
                 '8':
@@ -1397,16 +1403,16 @@ algaware:
                 size: [8.27, 11.69]
                 subplot_grid: [30, 27]
                 title: The Skagerrak
-                left_legend: 
-                    kwargs: 
-                        bbox_to_anchor: [-0.04, -0.005, 0.35, 0.1]
-                right_legend:  
-                    kwargs: 
-                        bbox_to_anchor: [0.138, -0.005, 0.6, 0.1]
+                left_legend:
+                    kwargs:
+                        bbox_to_anchor: [-0.04, -0.01, 0.35, 0.1]
+                right_legend:
+                    kwargs:
+                        bbox_to_anchor: [0.138, -0.01, 0.6, 0.1]
         The Western Baltic:
             axes:
                 '4':
-                    statn_nom: "BY32 NORRKÖPING"
+                    statn_nom: "BY32 NORRKÖPINGSDJ"
                     col_pos: 0
                     col_span: 6
                     row_pos: 14
@@ -1459,7 +1465,7 @@ algaware:
                             kwargs: {}
                             style: ylabel
                 '5':
-                    statn_nom: "BY32 NORRKÖPING"
+                    statn_nom: "BY32 NORRKÖPINGSDJ"
                     col_pos: 9
                     col_span: 18
                     row_pos: 14
@@ -1659,9 +1665,11 @@ algaware:
                 size: [8.27, 11.69]
                 subplot_grid: [30, 27]
                 title: The Western Baltic
-                left_legend: 
-                    kwargs: 
-                        bbox_to_anchor: [-0.04, 0.2, 0.35, 0.1]
-                right_legend:  
-                    kwargs: 
-                        bbox_to_anchor: [0.138, 0.2, 0.6, 0.1]
+                left_legend:
+                    axes_keys: ["0", "2", "4"]
+                    kwargs:
+                        bbox_to_anchor: [-0.04, 0.225, 0.35, 0.1]
+                right_legend:
+                    axes_keys: ["1", "3", "5"]
+                    kwargs:
+                        bbox_to_anchor: [0.138, 0.225, 0.6, 0.1]

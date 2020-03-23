@@ -5,9 +5,9 @@ Created on 2019-11-26 16:26
 @author: a002028
 
 """
-from . import alg_plot
-from . import data_core
-from . import readers
+from algaware import core
+from algaware import plot
+from algaware import readers
 
 import os
 import sys

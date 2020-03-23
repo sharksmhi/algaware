@@ -16,10 +16,8 @@ import matplotlib.pyplot as plt
 from threading import Thread
 import copy
 
-try:
-    from data_core import utils
-except:
-    from ..data_core import utils
+from algaware.core import utils
+
 
 def thread_process(call_function, *args, **kwargs):
     """
@@ -259,12 +257,13 @@ class FigureSetup(FigureBase):
         :param dpi:
         :return:
         """
+        export_folder = utils.get_export_folder()
         plt.tight_layout()
         if type(fmt) != list:
             fmt = [fmt]
         for f in fmt:
             file_name = '.'.join((self.figure_name, f))
-            plt.savefig(file_name, dpi=dpi)
+            plt.savefig('\\'.join((export_folder, file_name)), dpi=dpi)
 
 
 class PlotAlgaware(object):
@@ -289,13 +288,25 @@ class PlotAlgaware(object):
         :return:
         """
         for legend_key in ['right_legend', 'left_legend']:
-            plot_setting = self.default_plot_settings.get(legend_key)
+            plot_setting = self.setup_plot_setting(setup_key=legend_key)
             kwargs = self.get_data_kwargs(plot_setting['kwargs'], self.fig.figure_setup[legend_key])
             func = self.fig.setup['function_types'].get(plot_setting.get('function'))()
             func(self.fig,
                  plot_setting.get('axes_keys'),
                  plot_setting.get('nr_or_handles'),
                  kwargs)
+
+    def setup_plot_setting(self, setup_key=None):
+        """
+        :param setup_key:
+        :return:
+        """
+        plot_setting = copy.deepcopy(self.default_plot_settings.get(setup_key))
+        fig_setup = self.fig.figure_setup[setup_key]
+        for key in plot_setting.keys():
+            if fig_setup.get(key):
+                plot_setting[key] = fig_setup.get(key)
+        return plot_setting
 
     def get(self, attr):
         """
@@ -317,7 +328,7 @@ class PlotAlgaware(object):
             self.fig.axes[ax_key].data_key = data_key
             if self.fig.axes[ax_key].get('plot'):
                 for key, item in self.fig.axes[ax_key].get('plot').items():
-                    plot_setting = self.default_plot_settings.get(key)
+                    plot_setting = copy.deepcopy(self.default_plot_settings.get(key))
                     if 'function' in plot_setting:
                         func = self.fig.axes[ax_key].functions.get(plot_setting.get('function'))()
                         if data_key or item.get('data_type') == 'statistics':
@@ -336,6 +347,7 @@ class PlotAlgaware(object):
                                                                           item, secondary=True)
                                     else:
                                         kwargs = self.get_data_kwargs(plot_setting.get('kwargs'), item)
+                                    print(d_key)
                                     self.func_plot(d_key, ax_key, item, func, kwargs)
 
     def func_plot(self, key, ax_key, item, func, kwargs):
@@ -395,7 +407,7 @@ class PlotAlgaware(object):
         else:
             return []
 
-        if data_type:
+        if data_type:  # and key in self.data:
             data = self.data[key].get(data_type)
             if data is None:
                 return []
@@ -421,7 +433,7 @@ class PlotAlgaware(object):
                 item_kwargs = item.get('kwargs')
         else:
             item_kwargs = None
-        kwargs = utils.recursive_dict_update(copy.copy(default_kwargs),
+        kwargs = utils.recursive_dict_update(default_kwargs,
                                              item_kwargs)
         return kwargs
 

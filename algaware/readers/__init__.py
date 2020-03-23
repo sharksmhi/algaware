@@ -5,5 +5,5 @@ Created on 2019-12-04 11:14
 @author: a002028
 
 """
-from . import yaml_reader
-from . import txt_reader
+from algaware.readers.yaml_reader import YAMLreader
+from algaware.readers.txt_reader import load_txt

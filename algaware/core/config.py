@@ -6,19 +6,14 @@ Created on Thu Jul 05 14:23:22 2018
 """
 
 import os
-try:
-    from readers import yaml_reader
-except:
-    from ..readers import yaml_reader
-
-#from six.moves import configparser
+from algaware.readers.yaml_reader import YAMLreader
 
 
 class Settings(object):
     """
     """
     def __init__(self):
-        self.base_directory = os.path.dirname(os.path.realpath(__file__)).replace('\\data_core', '')
+        self.base_directory = os.path.dirname(os.path.realpath(__file__)).replace('\\core', '')
         etc_path = '\\'.join([self.base_directory, 'etc', ''])
         self._load_settings(etc_path)
         # self._check_local_paths()
@@ -70,7 +65,7 @@ class Settings(object):
         """
         # paths = self.get_filepaths_from_directory(etc_path)
         paths = self.generate_filepaths(etc_path, pattern='.yaml')
-        settings = yaml_reader.YAMLreader().load_yaml(paths, file_names_as_key=True, return_config=True)
+        settings = YAMLreader().load_yaml(paths, file_names_as_key=True, return_config=True)
         self.set_attributes(self, **settings)
         # subdirectories = self.get_subdirectories(etc_path)
         #
