@@ -376,3 +376,39 @@ def strip_text(x, text, strip=True):
     else:
         new_x = ''
     return new_x
+
+
+def update_dictionary(d, target_key=None, value=None):
+    """
+    :param d: dictionary
+    :param target_key:
+    :param value:
+    :return:
+    """
+    for key, item in d.items():
+        if key == target_key:
+            d[key] = value
+        elif isinstance(item, dict):
+            update_dictionary(item,
+                              target_key=target_key,
+                              value=value)
+    return d
+
+
+if __name__ == '__main__':
+    print('hej')
+    dd = {'a': {'b':4, 'c':5}, 'c':4}
+
+    dd = update_dictionary(dd, target_key='c', value=666)
+    print(dd)
+
+
+
+
+
+
+
+
+
+
+

@@ -19,6 +19,8 @@ from algaware.plot import plot as alg_plot
 class BaseSession(object):
     """
     """
+    year = int(time.strftime('%Y'))
+
     def __init__(self):
         super().__init__()
         self._start_time = None
@@ -32,9 +34,9 @@ class BaseSession(object):
         for item, value in kwargs.items():
             setattr(self, item, value)
 
-    @property
-    def start_time_year(self):
-        return self.start_time.year
+    @classmethod
+    def update_year(cls, value):
+        cls.year = value
 
     @property
     def start_time(self):
@@ -70,13 +72,14 @@ class Session(BaseSession):
         """
         return self.data_handler.get_station_data_information()
 
-    def initialize_data_handler(self):
+    def initialize_data_handler(self, ctd_directory=None):
         """
         :return:
         """
         self.data_handler = DataHandler(start_time=self.start_time,
                                         end_time=self.end_time,
-                                        settings=self.settings)
+                                        settings=self.settings,
+                                        ctd_directory=ctd_directory)
 
     def initialize_figure_handler(self):
         """
@@ -162,9 +165,10 @@ if __name__ == '__main__':
                            'end_time': '2020-02-29'})
     s.initialize_statistic_handler()
     s.initialize_data_handler()
-    s.load_data()
+    # s.load_data()
+    #
+    # s.initialize_figure_handler()
 
-    s.initialize_figure_handler()
     # # fig_obj.set_figure_settings('The Skagerrak')
     # # fig_obj.set_figure_settings('The Kattegat and The Sound')
     # # fig_obj.set_figure_settings('The Southern Baltic')
@@ -174,10 +178,10 @@ if __name__ == '__main__':
     # s.update_figure_settings('The Kattegat and The Sound')
     # s.update_figure_settings('The Southern Baltic')
     # s.update_figure_settings('The Western Baltic')
-    s.update_figure_settings('The Eastern Baltic')
-
-    s.initialize_plot_handler()
-    s.plot_figure()
+    # s.update_figure_settings('The Eastern Baltic')
+    #
+    # s.initialize_plot_handler()
+    # s.plot_figure()
 
 
     # statpath = 'etc\\statistics\\annual_2001-2015_ctd_temp_salt_statistics.txt'

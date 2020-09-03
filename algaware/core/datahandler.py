@@ -9,12 +9,10 @@ Created on 2019-11-26 16:35
 import pandas as pd
 import numpy as np
 import sys
-sys.path.append('C:/Utveckling/ctdpy')
+sys.path.append('C:\\Utveckling\\ctdpy')
 sys.path.append('C:/Utveckling/sharkpylib')
 import ctdpy
 from sharkpylib.sharkint.reader import SHARKintReader
-sys.path.remove('C:/Utveckling/ctdpy')
-sys.path.remove('C:/Utveckling/sharkpylib')
 
 from algaware.core.boolean_base import MeanDataBooleanBase
 
@@ -24,12 +22,7 @@ class CTDDataHandler(object):
 
     """
     def __init__(self, base_directory=None, file_pattern=''):
-        if not base_directory:
-            # ONLY FOR TESTING
-            # base_directory = '//winfs-proj/proj/havgem/EXPRAPP/Exprap2019/Aranda v45-46 November/CTD/CNV/'
-            # base_directory = '//winfs-proj/proj/havgem/EXPRAPP/Exprap2020/Svea v2-3/ctd/data/'
-            # base_directory = '//winfs-proj/proj/havgem/EXPRAPP/Exprap2020/Svea v6-7 Feb/ctd/cnv/'
-            base_directory = '//winfs-proj/proj/havgem/EXPRAPP/Exprap2020/Svea v11-12 Mars/Svea_CTD/data/2020/'
+        print('CTD directory:', base_directory)
 
         files = ctdpy.core.utils.generate_filepaths(base_directory,
                                                     endswith='.cnv',
@@ -56,7 +49,7 @@ class CTDDataHandler(object):
         #TODO do we want to include certain columns?
         fid = self.fid_mapping.get(key)
         if fid:
-            df = self.data[self.fid_mapping.get(key)]['hires_data']
+            df = self.data[self.fid_mapping.get(key)]['data']
             df = df.loc[:, selected_columns].astype(float)
             boolean = df['DEPH'] <= 50.0
             df = df.loc[boolean, :]
@@ -201,13 +194,14 @@ class SHARKintDataHandler(MeanDataBooleanBase):
 class DataHandler(object):
     """
     """
-    def __init__(self, start_time=None, end_time=None, settings=None):
+    def __init__(self, start_time=None, end_time=None, settings=None, ctd_directory=None):
         self.start_time = start_time
         self.end_time = end_time
         self.settings = settings
 
         #TODO use some sort of settings object to get data sources
-        self.ctd_handler = CTDDataHandler(file_pattern=self.start_time.strftime('%Y%m'))
+        self.ctd_handler = CTDDataHandler(file_pattern=self.start_time.strftime('%Y%m'),
+                                          base_directory=ctd_directory)
 
         #TODO change location of ship_mapper.. sharkpylib?
         self.si_handler = SHARKintDataHandler(ship_mapper=self.ctd_handler.ctd_session.settings.smap.map_shipc,
@@ -262,13 +256,7 @@ class DataHandler(object):
 
         x_list = []
         for key in visit_key:
-            # print(key)
-            # print(self.data_dict[key]['ctd'].keys())
             if key in self.data_dict:
-                # print(key)
-                # print(self.data_dict[key].keys())
-                # if key in ['2020_77SE_0212', '2020_77SE_0210']:
-                #     print(self.data_dict[key]['ctd'])
                 if self.data_dict[key]['ctd'] is not None:
                     if self.data_dict[key]['ctd']['CHLFLUO_CTD'].any():
                         x_list.append('x')
@@ -331,7 +319,6 @@ class DataHandler(object):
             stat_data = stat_obj.get_hi_lo_std(statn, 'CHLA', current_year=current_year)
             self.data_dict[key]['statistics'] = stat_obj.get_interpolated_data(stat_data)
 
-        # print('self.data_dict.keys()', self.data_dict.keys())
         for statn in self.settings.standard_stations['standard_stations'].get('station_list'):
             if statn not in added_stations:
                 stat_data = stat_obj.get_hi_lo_std(statn, 'CHLA', current_year=current_year)

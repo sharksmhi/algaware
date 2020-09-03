@@ -10,6 +10,7 @@ function_types:
     plot_fill_between: !!python/name:algaware.plot.functions.FillBetween ''
     plot_basic: !!python/name:algaware.plot.functions.BasicPlot ''
     update_axes_label: !!python/name:algaware.plot.functions.UpdateAxesLabel ''
+    update_axes_ranges: !!python/name:algaware.plot.functions.UpdateAxesRanges ''
 
 algaware:
     default_plot_settings:
@@ -1464,6 +1465,12 @@ algaware:
                             function: update_axes_label
                             kwargs: {}
                             style: ylabel
+                        autoscale:
+                            data_key: None
+                            function: update_axes_ranges
+                            kwargs:
+                                axis: x
+                            style: xaxes
                 '5':
                     statn_nom: "BY32 NORRKÖPINGSDJ"
                     col_pos: 9

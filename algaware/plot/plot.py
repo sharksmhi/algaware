@@ -336,6 +336,9 @@ class PlotAlgaware(object):
                                 kwargs = self.get_data_kwargs(plot_setting.get('kwargs'), item)
                                 if not data_key:
                                     data_key = station
+                                if isinstance(data_key, list):
+                                    # Statistics, which key does not matter (same station)
+                                    data_key = data_key[0]
                                 self.func_plot(data_key, ax_key, item, func, kwargs)
                             else:
                                 for i, d_key in enumerate(data_key):
@@ -347,7 +350,6 @@ class PlotAlgaware(object):
                                                                           item, secondary=True)
                                     else:
                                         kwargs = self.get_data_kwargs(plot_setting.get('kwargs'), item)
-                                    print(d_key)
                                     self.func_plot(d_key, ax_key, item, func, kwargs)
 
     def func_plot(self, key, ax_key, item, func, kwargs):
@@ -375,7 +377,7 @@ class PlotAlgaware(object):
                     if 'function' in item:
                         func = self.fig.axes[ax_key].functions.get(item.get('function'))()
                         value_key = item.get('data_key')
-                        value = self.get_key_data(data_key, value_key)
+                        value = self.get_key_data(data_key, value_key) or item.get('kwargs')
                         func(self.fig.axes[ax_key].ax, key, value)
 
     def get_key_data(self, data_key, header_key):

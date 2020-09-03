@@ -7,6 +7,7 @@ Created on 2019-12-04 10:42
 """
 import datetime
 from matplotlib import ticker, dates
+from algaware.core import session
 
 
 #TODO Functions below are meant to be initiated through the import of a yaml-file at startup
@@ -34,7 +35,7 @@ class MPLDatelocator:
             self.func = dates.MonthLocator(*args, **kwargs)
 
         #FIXME hardcoded xlim...
-        ax.set_xlim([datetime.date(2020, 1, 1), datetime.date(2020, 12, 31)])
+        ax.set_xlim([datetime.date(session.Session.year, 1, 1), datetime.date(session.Session.year, 12, 31)])
         if self.axis == 'x_axis':
             self.set_x(ax, locator)
         elif self.axis == 'y_axis':
@@ -301,3 +302,19 @@ class UpdateAxesLabel:
             label = ax.xaxis.get_label_text()
             label = '\n'.join([label_input, label])
             ax.set_xlabel(label)
+
+
+class UpdateAxesRanges:
+    """
+    """
+    @staticmethod
+    def __call__(ax, attr, kwargs):
+        """
+        :param ax:
+        :param attr:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        ax.autoscale(**kwargs)
+        ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True, min_n_ticks=5))

@@ -20,7 +20,6 @@ class YAMLreader(dict):
 
     def load_yaml(self, config_files, file_names_as_key=False, return_config=False):
         """
-
         :param config_files: Preferably list of file paths
         :param file_names_as_key: False | True
         :param return_config: False | True
@@ -48,5 +47,4 @@ class YAMLreader(dict):
         :param file_path: str, complete path to file
         :return: filename without extension
         """
-        filename = os.path.basename(file_path)
-        return os.path.splitext(filename)[0]
+        return os.path.splitext(os.path.basename(file_path))[0]
