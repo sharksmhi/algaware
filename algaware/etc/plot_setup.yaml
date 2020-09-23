@@ -1120,12 +1120,12 @@ algaware:
                     y_axis:
                         parent: true
                         set_ylim: 
-                            args: [[0,20]]
+                            args: [[0,13]]
                             function: axis_kwargs
                             kwargs: {}
                             style: ylim
                         set_yticks: 
-                            args: [[0,5,10,15,20]]
+                            args: [[0,2,4,6,8,10,12]]
                             function: axis_kwargs
                             kwargs: {}
                             style: yticks

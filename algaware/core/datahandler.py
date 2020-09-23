@@ -322,7 +322,8 @@ class DataHandler(object):
         for statn in self.settings.standard_stations['standard_stations'].get('station_list'):
             if statn not in added_stations:
                 stat_data = stat_obj.get_hi_lo_std(statn, 'CHLA', current_year=current_year)
-                self.data_dict[statn] = {'statistics': stat_obj.get_interpolated_data(stat_data)}
+                self.data_dict[statn] = {'statistics': stat_obj.get_interpolated_data(stat_data),
+                                         'sharkint_surface': self.si_handler.get_station_data(statn)}
 
         print('statistics added to data source')
 

@@ -331,8 +331,9 @@ class PlotAlgaware(object):
                     plot_setting = copy.deepcopy(self.default_plot_settings.get(key))
                     if 'function' in plot_setting:
                         func = self.fig.axes[ax_key].functions.get(plot_setting.get('function'))()
-                        if data_key or item.get('data_type') == 'statistics':
-                            if isinstance(data_key, str) or item.get('data_type') == 'statistics':
+                        if data_key or item.get('data_type') == 'statistics' or item.get('data_type') == 'sharkint_surface':
+                            # if isinstance(data_key, str) or item.get('data_type') == 'statistics':
+                            if isinstance(data_key, str) or item.get('data_type') == 'statistics' or item.get('data_type') == 'sharkint_surface':
                                 kwargs = self.get_data_kwargs(plot_setting.get('kwargs'), item)
                                 if not data_key:
                                     data_key = station
@@ -412,6 +413,7 @@ class PlotAlgaware(object):
         if data_type:  # and key in self.data:
             data = self.data[key].get(data_type)
             if data is None:
+                print('if data is None', key)
                 return []
             args = [data[param] for param in plot_setting.get('data_keys')]
             return args
