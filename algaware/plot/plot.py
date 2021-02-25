@@ -29,7 +29,7 @@ def thread_process(call_function, *args, **kwargs):
     Thread(target=call_function, args=args, kwargs=kwargs).start()
 
 
-class FigureBase(object):
+class FigureBase:
     """
     """
     def __init__(self):
@@ -73,7 +73,7 @@ class FigureBase(object):
         return self.settings['default_plot_settings']
 
 
-class Axes(object):
+class Axes:
     """
     """
     def __init__(self, settings=None, figure_axes=None, figure_grid=None, functions=None):
@@ -88,12 +88,15 @@ class Axes(object):
         if parent_ax:
             parent_ax = parent_ax.ax
 
-        self.ax = plt.subplot2grid(self.figure_grid,
-                                   (self.row_pos, self.col_pos),
-                                   rowspan=self.row_span,
-                                   colspan=self.col_span,
-                                   sharex=parent_ax,
-                                   sharey=parent_ax)
+        self.ax = plt.subplot2grid(
+            self.figure_grid,
+            (self.row_pos, self.col_pos),
+            rowspan=self.row_span,
+            colspan=self.col_span,
+            sharex=parent_ax,
+            sharey=parent_ax
+        )
+
         self._axes_settings()
 
     def get(self, attr):
@@ -246,10 +249,12 @@ class FigureSetup(FigureBase):
         """
         self.axes = {}
         for key, ax_settings in self.axes_setup.items():
-            self.axes[key] = Axes(settings=ax_settings,
-                                  figure_axes=self.axes,
-                                  figure_grid=self.figure_setup.get('subplot_grid'),
-                                  functions=self.setup['function_types'])
+            self.axes[key] = Axes(
+                settings=ax_settings,
+                figure_axes=self.axes,
+                figure_grid=self.figure_setup.get('subplot_grid'),
+                functions=self.setup['function_types']
+            )
 
     def save(self, fmt='png', dpi=300):
         """
@@ -257,16 +262,21 @@ class FigureSetup(FigureBase):
         :param dpi:
         :return:
         """
+
+        # It seems like matplotlib 3.3.2 produces strange figures.. 3.1 works though!
+        date_today = utils.get_now_time('%Y%m%d')
         export_folder = utils.get_export_folder()
         plt.tight_layout()
         if type(fmt) != list:
             fmt = [fmt]
+
+        file_name = '_'.join((self.figure_name, date_today))
         for f in fmt:
-            file_name = '.'.join((self.figure_name, f))
+            file_name = '.'.join((file_name, f))
             plt.savefig('\\'.join((export_folder, file_name)), dpi=dpi)
 
 
-class PlotAlgaware(object):
+class PlotAlgaware:
     """
     """
     def __init__(self, figure_setup=None, data=None, station_key_map=None):

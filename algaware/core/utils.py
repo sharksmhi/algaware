@@ -318,6 +318,15 @@ def get_timestamp(x):
     return pd.Timestamp(x)
 
 
+def get_now_time(fmt):
+    """
+    :param fmt: str, format to export datetime object
+    :return:
+    """
+    fmt = fmt or '%Y-%m-%d %H:%M:%S'
+    return datetime.now().strftime(fmt)
+
+
 def is_sequence(arg):
     """
     Checks if an object is iterable (you can loop over it) and not a string

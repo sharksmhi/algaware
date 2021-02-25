@@ -76,10 +76,12 @@ class Session(BaseSession):
         """
         :return:
         """
-        self.data_handler = DataHandler(start_time=self.start_time,
-                                        end_time=self.end_time,
-                                        settings=self.settings,
-                                        ctd_directory=ctd_directory)
+        self.data_handler = DataHandler(
+            start_time=self.start_time,
+            end_time=self.end_time,
+            settings=self.settings,
+            ctd_directory=ctd_directory,
+        )
 
     def initialize_figure_handler(self):
         """
@@ -87,13 +89,29 @@ class Session(BaseSession):
         """
         self.figure_handler = alg_plot.FigureSetup(setup=self.settings.plot_setup)
 
+    def update_figure_settings(self, settings_key):
+        """
+        :param settings_key: For Algaware figures this key can be either of the following:
+                             - 'The Skagerrak'
+                             - 'The Kattegat and The Sound'
+                             - 'The Southern Baltic'
+                             - 'The Western Baltic'
+                             - 'The Eastern Baltic'
+        :return:
+        """
+        self.figure_handler.set_figure_settings(settings_key)
+        self.figure_handler.refresh_mpl_figure()
+        self.figure_handler.refresh_axes()
+
     def initialize_plot_handler(self):
         """
         :return:
         """
-        self.plot_handler = alg_plot.PlotAlgaware(figure_setup=self.figure_handler,
-                                                  data=self.data_handler.data_dict,
-                                                  station_key_map=self.data_handler.station_key_map)
+        self.plot_handler = alg_plot.PlotAlgaware(
+            figure_setup=self.figure_handler,
+            data=self.data_handler.data_dict,
+            station_key_map=self.data_handler.station_key_map
+        )
 
     def initialize_statistic_handler(self):
         """
@@ -119,25 +137,12 @@ class Session(BaseSession):
         # print("Plot time: --%.3f sec" % (time.time() - start_timeit))
         self.figure_handler.save(fmt=save_as_format)
 
-    def update_figure_settings(self, settings_key):
-        """
-        :param settings_key: For Algaware figures this key can be either of the following:
-                             - 'The Skagerrak'
-                             - 'The Kattegat and The Sound'
-                             - 'The Southern Baltic'
-                             - 'The Western Baltic'
-                             - 'The Eastern Baltic'
-        :return:
-        """
-        self.figure_handler.set_figure_settings(settings_key)
-        self.figure_handler.refresh_mpl_figure()
-        self.figure_handler.refresh_axes()
-
     def load_data(self):
         """
         :return:
         """
         self.data_handler.load_all_data_sources()
+        self.data_handler.store_station_max_values()
         self._append_statistics_to_data_handler()
 
     def _append_statistics_to_data_handler(self):

@@ -198,6 +198,7 @@ class DataHandler(object):
         self.start_time = start_time
         self.end_time = end_time
         self.settings = settings
+        self.profile_max_values = {}
 
         #TODO use some sort of settings object to get data sources
         self.ctd_handler = CTDDataHandler(file_pattern=self.start_time.strftime('%Y%m'),
@@ -210,6 +211,13 @@ class DataHandler(object):
 
         self.data_dict = {}
         self._station_key_map = None
+
+    def store_station_max_values(self):
+        #TODO we want to store max for the different figures (kattegatt, western baltic, etc..)
+        for key, item in self.data_dict.items():
+            m = item['sharkint_profile']['CHLA'].max()
+            m_ctd = item['ctd']['CHLFLUO_CTD'].max()
+            self.profile_max_values.setdefault(item.get('station'), m if m > m_ctd else m_ctd)
 
     def get_station_data_information(self):
         df = pd.DataFrame([], columns=['Station', 'Statistics', 'BTL-data', 'CTD-data', 'Dates'])

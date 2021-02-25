@@ -1,7 +1,7 @@
 standard_stations:
     station_list: ["Å13", "Å15", "Å17", "SLÄGGÖ", "P2", "FLADEN", "ANHOLT E", "N14 FALKENBERG", "W LANDSKRONA",
-                   "BY1", "BY2 ARKONA", "BY4 CHRISTIANSÖ", "BY5 BORNHOLMSDJ", "REF M1V1", "BY32 NORRKÖPINGSDJ", "BY38 KARLSÖDJ",
-                   "BY10", "BY15 GOTLANDSDJ", "BY20 FÅRÖDJ", "BCS III-10"]
+                   "BY1", "BY2 ARKONA", "BY4 CHRISTIANSÖ", "BY5 BORNHOLMSDJ", "REF M1V1",
+                   "BY32 NORRKÖPINGSDJ", "BY38 KARLSÖDJ", "BY10", "BY15 GOTLANDSDJ", "BY20 FÅRÖDJ", "BCS III-10"]
     Å13: "The Skagerrak"
     Å15: "The Skagerrak"
     Å17: "The Skagerrak"

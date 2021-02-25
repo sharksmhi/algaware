@@ -90,12 +90,12 @@ algaware:
                     x_axis:
                         parent: true
                         set_xlim: 
-                            args: [[0,10]]
+                            args: [[0,12]]
                             function: axis_kwargs
                             kwargs: {}
                             style: xlim
                         major_locator: 
-                            args: [[0,2,4,6,8,10]]
+                            args: [[0,2,4,6,8,10,12]]
                             function: ticker_locator
                             kwargs: {}
                             style: fixed_ticker
@@ -1042,12 +1042,14 @@ algaware:
                     x_axis:
                         parent: true
                         set_xlim: 
-                            args: [[0,10]]
+#                            args: [[0,10]]
+                            args: [[0,18]]
                             function: axis_kwargs
                             kwargs: {}
                             style: xlim
                         major_locator: 
-                            args: [[0,2,4,6,8,10]]
+#                            args: [[0,2,4,6,8,10]]
+                            args: [[0,3,6,9,12,15,18]]
                             function: ticker_locator
                             kwargs: {}
                             style: fixed_ticker
@@ -1465,12 +1467,12 @@ algaware:
                             function: update_axes_label
                             kwargs: {}
                             style: ylabel
-                        autoscale:
-                            data_key: None
-                            function: update_axes_ranges
-                            kwargs:
-                                axis: x
-                            style: xaxes
+#                        autoscale:
+#                            data_key: None
+#                            function: update_axes_ranges
+#                            kwargs:
+#                                axis: x
+#                            style: xaxes
                 '5':
                     statn_nom: "BY32 NORRKÖPINGSDJ"
                     col_pos: 9
