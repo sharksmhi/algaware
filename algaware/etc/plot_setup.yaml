@@ -90,12 +90,12 @@ algaware:
                     x_axis:
                         parent: true
                         set_xlim: 
-                            args: [[0,12]]
+                            args: [[0,10]]
                             function: axis_kwargs
                             kwargs: {}
                             style: xlim
                         major_locator: 
-                            args: [[0,2,4,6,8,10,12]]
+                            args: [[0,2,4,6,8,10]]
                             function: ticker_locator
                             kwargs: {}
                             style: fixed_ticker
@@ -141,6 +141,7 @@ algaware:
                     row_pos: 21
                     row_span: 6
                     x_axis:
+                        parent: true
                         major_locator:
                             args: []
                             function: date_locator
@@ -164,7 +165,6 @@ algaware:
                             function: date_formatter
                             kwargs: {}
                             style: date
-                        parent: true
                     y_axis:
                         parent: true
                         set_ylim: 
@@ -1042,14 +1042,12 @@ algaware:
                     x_axis:
                         parent: true
                         set_xlim: 
-#                            args: [[0,10]]
-                            args: [[0,18]]
+                            args: [[0,10]]
                             function: axis_kwargs
                             kwargs: {}
                             style: xlim
                         major_locator: 
-#                            args: [[0,2,4,6,8,10]]
-                            args: [[0,3,6,9,12,15,18]]
+                            args: [[0,2,4,6,8,10]]
                             function: ticker_locator
                             kwargs: {}
                             style: fixed_ticker

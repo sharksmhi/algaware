@@ -216,8 +216,9 @@ class DataHandler(object):
         #TODO we want to store max for the different figures (kattegatt, western baltic, etc..)
         for key, item in self.data_dict.items():
             m = item['sharkint_profile']['CHLA'].max()
-            m_ctd = item['ctd']['CHLFLUO_CTD'].max()
-            self.profile_max_values.setdefault(item.get('station'), m if m > m_ctd else m_ctd)
+            if type(item['ctd']) == pd.DataFrame:
+                m_ctd = item['ctd']['CHLFLUO_CTD'].max()
+                self.profile_max_values.setdefault(item.get('station'), m if m > m_ctd else m_ctd)
 
     def get_station_data_information(self):
         df = pd.DataFrame([], columns=['Station', 'Statistics', 'BTL-data', 'CTD-data', 'Dates'])

@@ -10,9 +10,9 @@ from matplotlib import ticker, dates
 from algaware.core import session
 
 
-#TODO Functions below are meant to be initiated through the import of a yaml-file at startup
-# Perhaps this way of work should be extended and therefore this py-file may be divided into multiple py-files depending
-# on type of functions..
+# TODO Functions below are meant to be initiated through the import of a yaml-file at startup
+#  Perhaps this way of work should be extended and therefore this py-file may be divided into multiple py-files
+#  depending on type of functions..
 
 
 class MPLDatelocator:

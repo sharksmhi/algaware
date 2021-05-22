@@ -5,6 +5,7 @@ Created on 2019-12-02 16:04
 @author: a002028
 
 """
+import os
 import seaborn as sns
 sns.set_style("ticks", {'axes.grid': True, 'grid.linestyle': '--'})
 # sns.set_style("whitegrid")
@@ -272,8 +273,8 @@ class FigureSetup(FigureBase):
 
         file_name = '_'.join((self.figure_name, date_today))
         for f in fmt:
-            file_name = '.'.join((file_name, f))
-            plt.savefig('\\'.join((export_folder, file_name)), dpi=dpi)
+            name = '.'.join((file_name, f))
+            plt.savefig(os.path.join(export_folder, name), dpi=dpi)
 
 
 class PlotAlgaware:

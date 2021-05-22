@@ -19,6 +19,7 @@ class Settings(object):
         # self._check_local_paths()
         # self._setup_mapping_parameter()
         # self._setup_mapping_ship()
+        self._add_basin_station_mapping()
 
     def __setattr__(self, name, value):
         """
@@ -34,6 +35,18 @@ class Settings(object):
         elif isinstance(value, dict) and 'paths' in name:
             self._check_for_paths(value)
         super().__setattr__(name, value)
+
+    def _add_basin_station_mapping(self):
+        """
+        """
+        self.basin_station_mapping = {}
+        for key, item in self.standard_stations['standard_stations'].items():
+            if key == 'station_list':
+                continue
+            if item not in self.basin_station_mapping:
+                self.basin_station_mapping[item] = set([key])
+            else:
+                self.basin_station_mapping[item].add(key)
 
     def _check_local_paths(self):
         """
