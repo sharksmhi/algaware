@@ -163,7 +163,7 @@ class Session(BaseSession):
             30: {'range': [[0, 30]], 'ticks': [[0,6,12,18,24,30]]},
         }
         def get_max_value(current_value, statn):
-            if self.data_handler.profile_max_values[statn] > current_value:
+            if self.data_handler.profile_max_values.get(statn, current_value-1) > current_value:
                 return int(self.data_handler.profile_max_values[statn]) + 1
             else:
                 return current_value

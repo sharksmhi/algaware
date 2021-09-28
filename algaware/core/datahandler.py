@@ -118,14 +118,27 @@ class SHARKintDataHandler(MeanDataBooleanBase):
         """
         self.reset_boolean()
         self.data = self.si_session.get_data_in_dataframe()
-        self.add_boolean_not_nan('CHLA')
-        self.add_boolean_not_equal('Q_CHLA', 'B')
-        self.data = self.data.loc[self.boolean, :].reset_index(drop=True)
         self.set_timestamp('SDATE')
         self.set_datetime_str_format('MYEAR', fmt='%Y')
         self.set_datetime_format('datetime')
         self.map_ship()
         self.set_key()
+        self.set_key_metadata()
+        self.reset_boolean()
+        self.add_boolean_not_nan('CHLA')
+        self.add_boolean_not_equal('Q_CHLA', 'B')
+        self.data = self.data.loc[self.boolean, :].reset_index(drop=True)
+
+    def set_key_metadata(self):
+        """"""
+        self.meta = {}
+        for key in self.session_key_list:
+            boolean = self.data['key'] == key
+            key_meta = {}
+            key_meta['station'] = self.data.loc[boolean, 'STATN'].values[0]
+            key_meta['datetime'] = pd.Timestamp(self.data.loc[boolean, 'datetime'].values[0])
+            key_meta['sdate'] = key_meta['datetime'].strftime('%Y-%m-%d')
+            self.meta.setdefault(key, key_meta)
 
     def map_ship(self):
         """
@@ -303,12 +316,18 @@ class DataHandler(object):
         """
         for key in self.si_handler.session_key_list:
             key_dict = {}
-            key_dict['sharkint_profile'] = self.si_handler.get_key_data(key)
-            key_dict['station'] = key_dict['sharkint_profile']['STATN'].iloc[0]
-            key_dict['datetime'] = key_dict['sharkint_profile']['datetime'].iloc[0]
-            key_dict['sdate'] = key_dict['datetime'].strftime('%Y-%m-%d')
-            key_dict['sharkint_surface'] = self.si_handler.get_station_data(key_dict['station'])
             key_dict['ctd'] = self.ctd_handler.get_key_data(key)
+            key_dict['station'] = self.si_handler.meta[key].get('station')
+            key_dict['datetime'] = self.si_handler.meta[key].get('datetime')
+            key_dict['sdate'] = self.si_handler.meta[key].get('sdate')
+            key_dict['sharkint_surface'] = self.si_handler.get_station_data(key_dict['station'])
+            try:
+                key_dict['sharkint_profile'] = self.si_handler.get_key_data(key)
+                # key_dict['station'] = key_dict['sharkint_profile']['STATN'].iloc[0]
+                # key_dict['datetime'] = key_dict['sharkint_profile']['datetime'].iloc[0]
+                # key_dict['sdate'] = key_dict['datetime'].strftime('%Y-%m-%d')
+            except IndexError:
+                key_dict['sharkint_profile'] = None
 
             self.data_dict[key] = key_dict
 
