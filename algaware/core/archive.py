@@ -16,6 +16,7 @@ def floater(v):
     """"""
     return float(v) if v else np.nan
 
+
 class SHARKarchive:
     """Class to extract data from SHARK archives."""
 
