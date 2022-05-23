@@ -53,7 +53,7 @@ algaware:
                 linewidth: 1
                 alpha: 0.9
                 color: blue
-                label: "Monthly Chl-a averages 0-20 m (2001-2015)"
+                label: "Monthly Chl-a averages 0-20 m (1991-2020)"
                 zorder: 2
             style: line
         std_dev:

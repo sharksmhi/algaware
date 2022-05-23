@@ -50,6 +50,9 @@ class CTDDataHandler(object):
         fid = self.fid_mapping.get(key)
         if fid:
             df = self.data[self.fid_mapping.get(key)]['data']
+            for c in selected_columns:
+                if c not in df:
+                    df[c] = np.nan
             df = df.loc[:, selected_columns].astype(float)
             boolean = df['DEPH'] <= 50.0
             df = df.loc[boolean, :]

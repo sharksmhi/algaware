@@ -119,7 +119,7 @@ class Session(BaseSession):
         """
         # TODO: Do we need statistics here? perhaps we could move it directly to the datahandler ?
         statistics_directory = '/'.join((self.settings.base_directory, 'etc', 'statistics',
-                                         'annual_2001-2015_ctd_temp_salt_statistics_chl20m.txt'))
+                                         'annual_1991-2020_statistics_chl20m.txt'))
         self.statistic_handler = StatisticsHandler(statpath=statistics_directory)
 
     def plot_figure(self, save_as_format=['eps', 'png']):
