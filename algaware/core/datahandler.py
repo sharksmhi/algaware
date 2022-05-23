@@ -12,8 +12,8 @@ import sys
 sys.path.append('C:\\Utveckling\\ctdpy')
 sys.path.append('C:/Utveckling/sharkpylib')
 import ctdpy
-from sharkpylib.sharkint.reader import SHARKintReader
-
+# from sharkpylib.sharkint.reader import SHARKintReader
+from algaware.core.archive import SHARKarchive
 from algaware.core.boolean_base import MeanDataBooleanBase
 
 
@@ -82,17 +82,17 @@ class CTDDataHandler(object):
 
 
 class SHARKintDataHandler(MeanDataBooleanBase):
-    """
+    """"""
 
-    """
-    def __init__(self, ship_mapper=None, start_time=None, end_time=None):
+    def __init__(self, ship_mapper=None, start_time=None, end_time=None,
+                 stations=None):
         super().__init__()
         self.start_time = start_time
         self.end_time = end_time
         self.smap = ship_mapper
-        self.si_session = SHARKintReader('prod',
-                                         # start_date=start_time.strftime('%Y%m%d'), end_date=end_time.strftime('%Y%m%d'),
-                                         year=self.start_time.year)
+        self.si_session = SHARKarchive(
+            stations=stations,
+            year=self.start_time.year)
         self._key_list = None
 
     def get_key_data(self, key):
@@ -222,6 +222,7 @@ class DataHandler(object):
 
         #TODO change location of ship_mapper.. sharkpylib?
         self.si_handler = SHARKintDataHandler(ship_mapper=self.ctd_handler.ctd_session.settings.smap.map_shipc,
+                                              stations=self.settings.standard_stations['standard_stations']['station_list'],
                                               start_time=start_time,
                                               end_time=end_time)
 
