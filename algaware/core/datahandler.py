@@ -37,7 +37,6 @@ class CTDDataHandler(object):
         :return:
         """
         self.data = self.read_data()
-
         self.set_ctd_keys()
 
     def get_key_data(self, key):

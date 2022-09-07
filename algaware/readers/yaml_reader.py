@@ -27,7 +27,7 @@ class YAMLreader(dict):
         """
         for config_file in config_files:
             with open(config_file, encoding='utf8') as fd:
-                file = yaml.load(fd)
+                file = yaml.full_load(fd)
                 # try:
                 #     file = yaml.load(fd)
                 # except yaml.YAMLError:
