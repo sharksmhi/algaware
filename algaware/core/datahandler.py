@@ -75,6 +75,10 @@ class CTDDataHandler(object):
             myear = str(ctdpy.core.utils.get_timestamp(self.data[fid]['metadata'].get('SDATE')).year)
             shipc = self.ctd_session.settings.smap.map_shipc(self.data[fid]['metadata'].get('SHIPC'))
             serno = self.data[fid]['metadata'].get('SERNO')
+
+            if shipc == '77SE Svea':
+                shipc = '77SE'
+
             key = '_'.join([myear, shipc, serno])
             self.data[fid]['metadata']['key'] = key
             self.fid_mapping.setdefault(key, fid)
