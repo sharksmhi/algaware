@@ -9,12 +9,16 @@ Created on 2019-11-26 16:35
 import pandas as pd
 import numpy as np
 import sys
-sys.path.append('C:\\Utveckling\\ctdpy')
-sys.path.append('C:/Utveckling/sharkpylib')
+import logging
+
 import ctdpy
 # from sharkpylib.sharkint.reader import SHARKintReader
 from algaware.core.archive import SHARKarchive
+from algaware.core.lims import LIMSexport
 from algaware.core.boolean_base import MeanDataBooleanBase
+
+
+logger = logging.getLogger(__name__)
 
 
 class CTDDataHandler(object):
@@ -210,10 +214,144 @@ class SHARKintDataHandler(MeanDataBooleanBase):
         self._key_list = x.unique()
 
 
+class LIMSDataHandler(MeanDataBooleanBase):
+    """"""
+
+    def __init__(self, ship_mapper=None, start_time=None, end_time=None,
+                 lims_path=None,
+                 stations=None):
+        super().__init__()
+        self.start_time = start_time
+        self.end_time = end_time
+        self.smap = ship_mapper
+        self.si_session = LIMSexport(
+            stations=stations,
+            path=lims_path
+        )
+        self._key_list = None
+
+    def get_key_data(self, key):
+        """
+        :param key:
+        :return:
+        """
+        self.reset_boolean()
+        self.add_boolean_equal('key', key)
+        return self.data.loc[self.boolean, :].reset_index(drop=True)
+
+    def get_station_data(self, station):
+        """
+        :param station:
+        :return:
+        """
+        self.reset_boolean()
+        self.add_boolean_equal('STATN', station)
+        self.add_boolean_less_or_equal('DEPH', 20.0)
+        data = self.data.loc[self.boolean, ['timestamp', 'datetime', 'CHLA']]
+        return data.groupby(['timestamp', 'datetime'], as_index=False).mean()
+
+    def load_data(self):
+        """
+        :return:
+        """
+        self.reset_boolean()
+        self.data = self.si_session.get_data_in_dataframe()
+        self.set_timestamp('SDATE')
+        self.set_datetime_str_format('MYEAR', fmt='%Y')
+        self.set_datetime_format('datetime')
+        self.map_ship()
+        self.set_key()
+        self.set_key_metadata()
+        self.reset_boolean()
+        self.add_boolean_not_nan('CHLA')
+        self.add_boolean_not_equal('Q_CHLA', 'B')
+        self.data = self.data.loc[self.boolean, :].reset_index(drop=True)
+
+    def set_key_metadata(self):
+        """"""
+        self.meta = {}
+        for key in self.session_key_list:
+            boolean = self.data['key'] == key
+            key_meta = {}
+            key_meta['station'] = self.data.loc[boolean, 'STATN'].values[0]
+            key_meta['datetime'] = pd.Timestamp(self.data.loc[boolean, 'datetime'].values[0])
+            key_meta['sdate'] = key_meta['datetime'].strftime('%Y-%m-%d')
+            self.meta.setdefault(key, key_meta)
+
+    def map_ship(self):
+        """
+        :return:
+        """
+        def map_ship(s):
+            if s == '10':
+                s = '77SE'
+            return s
+
+        self.data['SHIPC'] = self.data['SHIPC'].apply(map_ship)
+        # self.data['SHIPC'] = self.data['SHIPC'].apply(self.smap)
+
+    def set_datetime_format(self, key):
+        """
+        :param data:
+        :param key:
+        :param fmt:
+        :return:
+        """
+        self.data[key] = self.data['timestamp'].apply(pd.to_datetime)
+
+    def set_datetime_str_format(self, key, fmt='%Y'):
+        """
+        :param data:
+        :param key:
+        :param fmt:
+        :return:
+        """
+        self.data[key] = self.data['timestamp'].dt.strftime(fmt)
+
+    def set_key(self, keys=None):
+        """
+        :param keys:
+        :param data:
+        :return:
+        """
+        if keys is None:
+            keys = ['MYEAR', 'SHIPC', 'SERNO']
+        self.data['key'] = self.data[keys].apply(lambda x: '_'.join(x), axis=1)
+
+        self.reset_boolean()
+        self.add_boolean_greater_or_equal('timestamp', self.start_time)
+        self.add_boolean_less_or_equal('timestamp', self.end_time)
+        pass
+        self.session_key_list = self.data.loc[self.boolean, 'key']
+
+    def set_timestamp(self, key, fmt='%Y'):
+        """
+        :param data:
+        :param key:
+        :param fmt:
+        :return:
+        """
+        self.data['timestamp'] = self.data[key].apply(pd.Timestamp)
+
+    @property
+    def session_key_list(self):
+        """
+        :return:
+        """
+        return self._key_list
+
+    @session_key_list.setter
+    def session_key_list(self, x):
+        """
+        :return:
+        """
+        self._key_list = x.unique()
+
+
 class DataHandler(object):
     """
     """
-    def __init__(self, start_time=None, end_time=None, settings=None, ctd_directory=None):
+    def __init__(self, start_time=None, end_time=None, settings=None, ctd_directory=None, lims_path=None):
         self.start_time = start_time
         self.end_time = end_time
         self.settings = settings
@@ -223,11 +361,21 @@ class DataHandler(object):
         self.ctd_handler = CTDDataHandler(file_pattern=self.start_time.strftime('%Y%m'),
                                           base_directory=ctd_directory)
 
-        #TODO change location of ship_mapper.. sharkpylib?
-        self.si_handler = SHARKintDataHandler(ship_mapper=self.ctd_handler.ctd_session.settings.smap.map_shipc,
-                                              stations=self.settings.standard_stations['standard_stations']['station_list'],
+        if lims_path:
+            self.si_handler = LIMSDataHandler(ship_mapper=self.ctd_handler.ctd_session.settings.smap.map_shipc,
+                                              stations=self.settings.standard_stations['standard_stations'][
+                                                  'station_list'],
+                                              lims_path=lims_path,
                                               start_time=start_time,
                                               end_time=end_time)
+        else:
+            #TODO change location of ship_mapper.. sharkpylib?
+            self.si_handler = SHARKintDataHandler(ship_mapper=self.ctd_handler.ctd_session.settings.smap.map_shipc,
+                                                  stations=self.settings.standard_stations['standard_stations']['station_list'],
+                                                  start_time=start_time,
+                                                  end_time=end_time)
+
+
 
         self.data_dict = {}
         self._station_key_map = None
@@ -345,10 +493,15 @@ class DataHandler(object):
         :param stat_obj:
         :return:
         """
+        if not self.data_dict:
+            logger.warning(f'No annual statistics added')
+            return
         print('Adding annual statistics to data source..')
         added_stations = {}
         for key in self.data_dict:
             statn = self.data_dict[key].get('station')
+            if statn == 'BY39 ÖLANDS S UDDE':
+                continue
             added_stations[statn] = True
             current_year = str(self.data_dict[key]['datetime'].year)
             stat_data = stat_obj.get_hi_lo_std(statn, 'CHLA', current_year=current_year)
@@ -356,9 +509,14 @@ class DataHandler(object):
 
         for statn in self.settings.standard_stations['standard_stations'].get('station_list'):
             if statn not in added_stations:
-                stat_data = stat_obj.get_hi_lo_std(statn, 'CHLA', current_year=current_year)
-                self.data_dict[statn] = {'statistics': stat_obj.get_interpolated_data(stat_data),
-                                         'sharkint_surface': self.si_handler.get_station_data(statn)}
+                if statn == 'BY39 ÖLANDS S UDDE':
+                    continue
+                try:
+                    stat_data = stat_obj.get_hi_lo_std(statn, 'CHLA', current_year=current_year)
+                    self.data_dict[statn] = {'statistics': stat_obj.get_interpolated_data(stat_data),
+                                             'sharkint_surface': self.si_handler.get_station_data(statn)}
+                except AttributeError:
+                    logger.warning(f'Could not get statistics for station: {statn}')
 
         print('statistics added to data source')
 

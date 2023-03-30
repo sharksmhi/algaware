@@ -96,17 +96,20 @@ class StatisticsHandler(StatBooleanBase):
         :param data:
         :return:
         """
-        if 1 in data['datetime'].dt.month.values and 12 in data['datetime'].dt.month.values:
-            year = str(data['datetime'][0].year)
-            mean_low = np.nanmean([data['std_low'].iloc[0], data['std_low'].iloc[-1]])
-            mean_hi = np.nanmean([data['std_hi'].iloc[0], data['std_hi'].iloc[-1]])
-            mean_mean = np.nanmean([data[mean_param].iloc[0], data[mean_param].iloc[-1]])
-            df_first = pd.DataFrame({'datetime': [self.get_datetime(year, '1', '1')],
-                                     'std_low': [mean_low], 'std_hi': [mean_hi], 'mean': [mean_mean]})
-            df_last = pd.DataFrame({'datetime': [self.get_datetime(year, '12', '31')],
-                                    'std_low': [mean_low], 'std_hi': [mean_hi], 'mean': [mean_mean]})
+        try:
+            if 1 in data['datetime'].dt.month.values and 12 in data['datetime'].dt.month.values:
+                year = str(data['datetime'][0].year)
+                mean_low = np.nanmean([data['std_low'].iloc[0], data['std_low'].iloc[-1]])
+                mean_hi = np.nanmean([data['std_hi'].iloc[0], data['std_hi'].iloc[-1]])
+                mean_mean = np.nanmean([data[mean_param].iloc[0], data[mean_param].iloc[-1]])
+                df_first = pd.DataFrame({'datetime': [self.get_datetime(year, '1', '1')],
+                                         'std_low': [mean_low], 'std_hi': [mean_hi], 'mean': [mean_mean]})
+                df_last = pd.DataFrame({'datetime': [self.get_datetime(year, '12', '31')],
+                                        'std_low': [mean_low], 'std_hi': [mean_hi], 'mean': [mean_mean]})
 
-            return pd.concat([df_first, data, df_last]).reset_index(drop=True)
+                return pd.concat([df_first, data, df_last]).reset_index(drop=True)
+        except AttributeError:
+            pass
 
         return data
 

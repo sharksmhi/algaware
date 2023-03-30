@@ -1,6 +1,6 @@
 standard_stations:
     station_list: ["Å13", "Å15", "Å17", "SLÄGGÖ", "P2", "FLADEN", "ANHOLT E", "N14 FALKENBERG", "W LANDSKRONA",
-                   "BY1", "BY2 ARKONA", "BY4 CHRISTIANSÖ", "BY5 BORNHOLMSDJ", "REF M1V1",
+                   "BY1", "BY2 ARKONA", "BY4 CHRISTIANSÖ", "BY5 BORNHOLMSDJ", "BY39 ÖLANDS S UDDE",
                    "BY32 NORRKÖPINGSDJ", "BY38 KARLSÖDJ", "BY10", "BY15 GOTLANDSDJ", "BY20 FÅRÖDJ", "BCS III-10"]
     Å13: "The Skagerrak"
     Å15: "The Skagerrak"
@@ -15,7 +15,8 @@ standard_stations:
     BY2 ARKONA: "The Southern Baltic"
     BY4 CHRISTIANSÖ: "The Southern Baltic"
     BY5 BORNHOLMSDJ: "The Southern Baltic"
-    REF M1V1: "The Western Baltic"
+#    REF M1V1: "The Western Baltic"
+    BY39 ÖLANDS S UDDE: "The Western Baltic"
     BY32 NORRKÖPINGSDJ: "The Western Baltic"
     BY38 KARLSÖDJ: "The Western Baltic"
     BY10: "The Eastern Baltic"

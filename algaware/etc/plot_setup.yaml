@@ -1538,7 +1538,7 @@ algaware:
                             data_type: statistics
                             data_keys: [datetime, std_low, std_hi]
                 '0':
-                    statn_nom: "REF M1V1"
+                    statn_nom: "BY39 ÖLANDS S UDDE"
                     col_pos: 0
                     col_span: 6
                     row_pos: 0
@@ -1547,7 +1547,7 @@ algaware:
                         share_with: '4'
                     y_axis:
                         share_with: '4'
-                        set_ylabel: 
+                        set_ylabel:
                             args: ["Depth (m)"]
                             function: axis_kwargs
                             kwargs: {}
@@ -1567,13 +1567,13 @@ algaware:
                                 color: "green"
                                 linestyle: ":"
                     update_axes:
-                        set_ylabel: 
+                        set_ylabel:
                             data_key: sdate
                             function: update_axes_label
                             kwargs: {}
                             style: ylabel
                 '1':
-                    statn_nom: "REF M1V1"
+                    statn_nom: "BY39 ÖLANDS S UDDE"
                     col_pos: 9
                     col_span: 18
                     row_pos: 0
@@ -1583,7 +1583,7 @@ algaware:
                         invisible_major: true
                     y_axis:
                         share_with: '5'
-                        set_ylabel: 
+                        set_ylabel:
                             args: ["Chl-a (µg/l)"]
                             function: axis_kwargs
                             kwargs: {}
@@ -1591,7 +1591,7 @@ algaware:
                     axes_setting:
                         set_title:
                             args:
-                                - "Station: REF M1V1"
+                                - "Station: BY39 ÖLANDS S UDDE"
                             kwargs:
                                 fontsize: 10
                             style: title
@@ -1601,10 +1601,10 @@ algaware:
                             data_type: sharkint_surface
                             data_keys: [datetime, CHLA]
                         line_right:
-                            data_type: statistics
+                            data_type: ''
                             data_keys: [datetime, mean]
                         std_dev:
-                            data_type: statistics
+                            data_type: ''
                             data_keys: [datetime, std_low, std_hi]
                 '2':
                     statn_nom: "BY38 KARLSÖDJ"

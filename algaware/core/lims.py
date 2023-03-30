@@ -12,23 +12,17 @@ import datetime
 import numpy as np
 
 
-def floater(v):
+def lims_floater(v):
     """"""
-    return float(v) if v else np.nan
+    return float(v.strip('<')) if v else np.nan
 
 
-class SHARKarchive:
+class LIMSexport:
     """Class to extract data from SHARK archives."""
 
-    def __init__(self, archive_path=None, year=None, stations=None):
-        if not year:
-            year = str(datetime.date.today().year)
-        else:
-            year = str(year)
-
+    def __init__(self, path=None, stations=None):
         self.stations = stations or []
-        #self.archive_path = archive_path or fr'C:\Arbetsmapp\datasets\PhysicalChemical\{year}\SHARK_PhysicalChemical_{year}_BAS_SMHI\processed_data\data.txt'
-        self.archive_path = archive_path or fr'C:\PhysicalChemical\{year}\SHARK_PhysicalChemical_{year}_BAS_SMHI\processed_data\data.txt'
+        self.lims_path = path
         self._clear_selection()
 
         _df = pd.read_csv(
@@ -79,7 +73,7 @@ class SHARKarchive:
     def get_data_in_dataframe(self):
         """"""
         df = pd.read_csv(
-            self.archive_path,
+            self.lims_path,
             sep='\t',
             header=0,
             encoding='cp1252',
@@ -89,14 +83,17 @@ class SHARKarchive:
         columns = ['SHIPC', 'STATN', 'SDATE', 'SERNO',
                    'DEPH', 'CHLA', 'Q_CHLA', 'CTDCPHL']
         parameter_mapping = {
-            'CPHL': 'CHLA', 'Q_CPHL': 'Q_CHLA', 'FLUO_CTD': 'CTDCPHL'
+            'CPHL': 'CHLA',
+            'Q_CPHL': 'Q_CHLA',
+            'CHLFL': 'CTDCPHL',
+            'STNNO': 'SERNO'
         }
         df = df.rename(parameter_mapping, axis=1)
         df['STATN'] = df['STATN'].apply(self._mapper)
         df = df.loc[df['STATN'].isin(self.stations), :].reset_index(drop=True)
         for col in ('DEPH', 'CHLA', 'CTDCPHL'):
-            df[col] = df[col].apply(floater)
-        print('SHARK-archive load completed!')
+            df[col] = df[col].apply(lims_floater)
+        print('LIMS-export load completed!')
 
         return df[columns]
 
@@ -106,7 +103,7 @@ class SHARKarchive:
 
 
 if __name__ == '__main__':
-    sa = SHARKarchive(stations=[
+    sa = LIMSexport(stations=[
         "Å13", "Å15", "Å17", "SLÄGGÖ", "P2", "FLADEN", "ANHOLT E",
         "N14 FALKENBERG", "W LANDSKRONA",
         "BY1", "BY2 ARKONA", "BY4 CHRISTIANSÖ", "BY5 BORNHOLMSDJ", "REF M1V1",

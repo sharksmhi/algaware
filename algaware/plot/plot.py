@@ -339,6 +339,8 @@ class PlotAlgaware:
             self.fig.axes[ax_key].data_key = data_key
             if self.fig.axes[ax_key].get('plot'):
                 for key, item in self.fig.axes[ax_key].get('plot').items():
+                    if key == 'std_dev' and 'BY39' in station:
+                        continue
                     plot_setting = copy.deepcopy(self.default_plot_settings.get(key))
                     if 'function' in plot_setting:
                         func = self.fig.axes[ax_key].functions.get(plot_setting.get('function'))()
@@ -422,7 +424,8 @@ class PlotAlgaware:
             return []
 
         if data_type:  # and key in self.data:
-            data = self.data[key].get(data_type)
+            # data = self.data[key].get(data_type)
+            data = self.data.get(key, {}).get(data_type)
             if data is None:
                 print('if data is None', key)
                 return []

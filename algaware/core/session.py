@@ -72,7 +72,7 @@ class Session(BaseSession):
         """
         return self.data_handler.get_station_data_information()
 
-    def initialize_data_handler(self, ctd_directory=None):
+    def initialize_data_handler(self, ctd_directory=None, lims_path=None):
         """
         :return:
         """
@@ -81,6 +81,7 @@ class Session(BaseSession):
             end_time=self.end_time,
             settings=self.settings,
             ctd_directory=ctd_directory,
+            lims_path=lims_path
         )
 
     def initialize_figure_handler(self):
