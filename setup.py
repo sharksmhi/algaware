@@ -18,13 +18,14 @@ def long_description():
 
 setuptools.setup(
     name="algaware",
-    version="0.0.1",
+    version="0.1.0",
     author="Johannes Johansson",
-    author_email="johannes.johansson@smhi.se",
-    description="TEST version 0.0.1 Package to plot algaware figures",
+    author_email="magnus.wenzer@smhi.se",
+    description="First official version 0.1.0 Package to plot algaware figures",
     long_description=long_description(),
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/sharksmhi/algaware",
+    # url="https://github.com/pypa/sampleproject",
     packages=setuptools.find_packages(),
     package_data={'algaware': [os.path.join('etc', '*.yaml'),
                                os.path.join('etc', 'statistics', '*.txt')]},
