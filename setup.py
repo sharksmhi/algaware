@@ -16,12 +16,18 @@ def long_description():
         return 'No readme file'
 
 
+requirements = []
+with open(pathlib.Path(root, 'requirements.txt')) as fh:
+    for line in fh:
+        requirements.append(line.strip())
+
+
 setuptools.setup(
     name="algaware",
-    version="0.1.0",
+    version="0.2.0",
     author="Johannes Johansson",
     author_email="magnus.wenzer@smhi.se",
-    description="First official version 0.1.0 Package to plot algaware figures",
+    description="No able to specify archive root directory",
     long_description=long_description(),
     long_description_content_type="text/markdown",
     url="https://github.com/sharksmhi/algaware",
@@ -34,4 +40,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    python_requires='>=3.6',
+    install_requires=requirements,
 )

@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import sys
 import logging
+from pathlib import Path
 
 import ctdpy
 # from sharkpylib.sharkint.reader import SHARKintReader
@@ -92,12 +93,13 @@ class SHARKintDataHandler(MeanDataBooleanBase):
     """"""
 
     def __init__(self, ship_mapper=None, start_time=None, end_time=None,
-                 stations=None):
+                 stations=None, archive_path=None):
         super().__init__()
         self.start_time = start_time
         self.end_time = end_time
         self.smap = ship_mapper
         self.si_session = SHARKarchive(
+            archive_path=archive_path,
             stations=stations,
             year=self.start_time.year)
         self._key_list = None
@@ -351,7 +353,8 @@ class LIMSDataHandler(MeanDataBooleanBase):
 class DataHandler(object):
     """
     """
-    def __init__(self, start_time=None, end_time=None, settings=None, ctd_directory=None, lims_path=None):
+    def __init__(self, start_time=None, end_time=None, settings=None, ctd_directory=None, lims_path=None,
+                 archive_root_dir=None):
         self.start_time = start_time
         self.end_time = end_time
         self.settings = settings
@@ -370,10 +373,15 @@ class DataHandler(object):
                                               end_time=end_time)
         else:
             #TODO change location of ship_mapper.. sharkpylib?
+            year = str(self.start_time.year)
+            archive_path = Path(archive_root_dir, year, f'SHARK_PhysicalChemical_'
+                                                        f'{year}_BAS_SMHI/processed_data/data.txt')
+
             self.si_handler = SHARKintDataHandler(ship_mapper=self.ctd_handler.ctd_session.settings.smap.map_shipc,
                                                   stations=self.settings.standard_stations['standard_stations']['station_list'],
                                                   start_time=start_time,
-                                                  end_time=end_time)
+                                                  end_time=end_time,
+                                                  archive_path=archive_path)
 
 
 

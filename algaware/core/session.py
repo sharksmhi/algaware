@@ -72,7 +72,7 @@ class Session(BaseSession):
         """
         return self.data_handler.get_station_data_information()
 
-    def initialize_data_handler(self, ctd_directory=None, lims_path=None):
+    def initialize_data_handler(self, ctd_directory=None, lims_path=None, archive_root_dir=None):
         """
         :return:
         """
@@ -81,7 +81,8 @@ class Session(BaseSession):
             end_time=self.end_time,
             settings=self.settings,
             ctd_directory=ctd_directory,
-            lims_path=lims_path
+            lims_path=lims_path,
+            archive_root_dir=archive_root_dir
         )
 
     def initialize_figure_handler(self):
@@ -199,85 +200,3 @@ class Session(BaseSession):
                 else:
                     pass
 
-
-if __name__ == '__main__':
-
-    # Input from GUI (SHARKtools)
-    # start_time = pd.Timestamp(2019, 11, 1)
-    # end_time = pd.Timestamp(2019, 11, 30)
-    start_time = pd.Timestamp(2020, 1, 1)
-    end_time = pd.Timestamp(2020, 1, 31)
-    year = start_time.year
-
-    # settings = config.Settings()
-
-    s = Session()
-    # s.update_attributes(**{'start_time': '2020-01-01',
-    #                        'end_time': '2020-01-31'})
-    # s.update_attributes(**{'start_time': '2020-02-01',
-    #                        'end_time': '2020-02-29'})
-    # s.initialize_statistic_handler()
-    # s.initialize_data_handler()
-    # s.load_data()
-    #
-    # s.initialize_figure_handler()
-
-    # # fig_obj.set_figure_settings('The Skagerrak')
-    # # fig_obj.set_figure_settings('The Kattegat and The Sound')
-    # # fig_obj.set_figure_settings('The Southern Baltic')
-    # # fig_obj.set_figure_settings('The Western Baltic')
-    # fig_obj.set_figure_settings('The Eastern Baltic')
-    # s.update_figure_settings('The Skagerrak')
-    # s.update_figure_settings('The Kattegat and The Sound')
-    # s.update_figure_settings('The Southern Baltic')
-    # s.update_figure_settings('The Western Baltic')
-    # s.update_figure_settings('The Eastern Baltic')
-    #
-    # s.initialize_plot_handler()
-    # s.plot_figure()
-
-
-    # statpath = 'etc\\statistics\\annual_2001-2015_ctd_temp_salt_statistics.txt'
-    # statpath = 'etc\\statistics\\annual_2001-2015_ctd_temp_salt_statistics_chl20m.txt'
-    # sh = data_core.StatisticsHandler(statpath=statpath)
-    # dh = data_core.datahandler.DataHandler(start_time=start_time, end_time=end_time, settings=settings)
-    #
-    # print('session_key_list', dh.si_handler.session_key_list)
-    #
-    # start_timeit = time.time()
-    # dh.load_all_data_sources()
-    # print("Timed: --data loaded in %.3f sec" % (time.time() - start_timeit))
-    # dh.add_annual_statistics_to_dictionary(sh)
-    #
-    # # dh.get_ctd_data()
-    # # ctd_data = dh.get_ctd_data()
-    # #
-    # # si_data = dh.get_sharkint_data()
-    # # si_data = si.get_data_in_dataframe()
-    # # start_time = time.time()
-    #
-    # start_timeit = time.time()
-    # fig_obj = plot.FigureSetup(setup=settings.plot_setup)
-    # # fig_obj.set_figure_settings('The Skagerrak')
-    # # fig_obj.set_figure_settings('The Kattegat and The Sound')
-    # # fig_obj.set_figure_settings('The Southern Baltic')
-    # # fig_obj.set_figure_settings('The Western Baltic')
-    # fig_obj.set_figure_settings('The Eastern Baltic')
-    # fig_obj.refresh_mpl_figure()
-    # fig_obj.refresh_axes()
-    # print("Timed: --%.3f sec" % (time.time() - start_timeit))
-    #
-    # start_timeit = time.time()
-    # plt_obj = plot.PlotAlgaware(figure_setup=fig_obj,
-    #                             data=dh.data_dict,
-    #                             station_key_map=dh.station_key_map)
-    #
-    # plt_obj.plot()
-    # print("Plot time: --%.3f sec" % (time.time() - start_timeit))
-    # start_timeit = time.time()
-    # plt_obj.update_axes()
-    # plt_obj.add_legend()
-    # print("update_axes time: --%.3f sec" % (time.time() - start_timeit))
-    # print("Plot time: --%.3f sec" % (time.time() - start_timeit))
-    # fig_obj.save(fmt=['eps', 'png'])
-    # print("Save time: --%.3f sec" % (time.time() - start_timeit))
