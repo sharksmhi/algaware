@@ -7,6 +7,7 @@ Created on Tue Sep 11 08:05:22 2018
 
 import setuptools
 import os
+import pathlib
 
 
 def long_description():
