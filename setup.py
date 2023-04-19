@@ -27,7 +27,7 @@ with open(pathlib.Path(root, 'requirements.txt')) as fh:
 
 setuptools.setup(
     name="algaware",
-    version="0.2.0",
+    version="0.3.0",
     author="Johannes Johansson",
     author_email="magnus.wenzer@smhi.se",
     description="No able to specify archive root directory",
