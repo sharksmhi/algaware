@@ -37,6 +37,7 @@ setuptools.setup(
     # url="https://github.com/pypa/sampleproject",
     packages=setuptools.find_packages(),
     package_data={'algaware': [os.path.join('etc', '*.yaml'),
+                               os.path.join('etc', '*.txt'),
                                os.path.join('etc', 'statistics', '*.txt')]},
     classifiers=[
         "Programming Language :: Python :: 3",
