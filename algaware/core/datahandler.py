@@ -89,7 +89,7 @@ class CTDDataHandler(object):
             self.fid_mapping.setdefault(key, fid)
 
 
-class SHARKintDataHandler(MeanDataBooleanBase):
+class SHARKarchiveDataHandler(MeanDataBooleanBase):
     """"""
 
     def __init__(self, ship_mapper=None, start_time=None, end_time=None,
@@ -364,26 +364,26 @@ class DataHandler(object):
         self.ctd_handler = CTDDataHandler(file_pattern=self.start_time.strftime('%Y%m'),
                                           base_directory=ctd_directory)
 
+        # TODO change location of ship_mapper.. sharkpylib?
+        year = str(self.start_time.year)
+        archive_path = Path(archive_root_dir, year, f'SHARK_PhysicalChemical_'
+                                                    f'{year}_BAS_SMHI/processed_data/data.txt')
+
+        self.archive_handler = SHARKarchiveDataHandler(ship_mapper=self.ctd_handler.ctd_session.settings.smap.map_shipc,
+                                                       stations=self.settings.standard_stations['standard_stations'][
+                                                           'station_list'],
+                                                       start_time=start_time,
+                                                       end_time=end_time,
+                                                       archive_path=archive_path)
+
+        self.lims_handler = None
         if lims_path:
-            self.si_handler = LIMSDataHandler(ship_mapper=self.ctd_handler.ctd_session.settings.smap.map_shipc,
+            self.lims_handler = LIMSDataHandler(ship_mapper=self.ctd_handler.ctd_session.settings.smap.map_shipc,
                                               stations=self.settings.standard_stations['standard_stations'][
                                                   'station_list'],
                                               lims_path=lims_path,
                                               start_time=start_time,
                                               end_time=end_time)
-        else:
-            #TODO change location of ship_mapper.. sharkpylib?
-            year = str(self.start_time.year)
-            archive_path = Path(archive_root_dir, year, f'SHARK_PhysicalChemical_'
-                                                        f'{year}_BAS_SMHI/processed_data/data.txt')
-
-            self.si_handler = SHARKintDataHandler(ship_mapper=self.ctd_handler.ctd_session.settings.smap.map_shipc,
-                                                  stations=self.settings.standard_stations['standard_stations']['station_list'],
-                                                  start_time=start_time,
-                                                  end_time=end_time,
-                                                  archive_path=archive_path)
-
-
 
         self.data_dict = {}
         self._station_key_map = None
@@ -469,7 +469,9 @@ class DataHandler(object):
         :return:
         """
         self.ctd_handler.load_data()
-        self.si_handler.load_data()
+        self.archive_handler.load_data()
+        if self.lims_handler:
+            self.lims_handler.load_data()
 
         self.update_data_dictionary()
 
@@ -477,20 +479,41 @@ class DataHandler(object):
         """
         :return:
         """
-        for key in self.si_handler.session_key_list:
+        session_key_list = np.array([])
+        session_key_list = np.append(session_key_list, self.archive_handler.session_key_list)
+        session_key_list = np.append(session_key_list, self.lims_handler.session_key_list)
+        # for key in self.archive_handler.session_key_list:
+        for key in session_key_list:
             key_dict = {}
             key_dict['ctd'] = self.ctd_handler.get_key_data(key)
-            key_dict['station'] = self.si_handler.meta[key].get('station')
-            key_dict['datetime'] = self.si_handler.meta[key].get('datetime')
-            key_dict['sdate'] = self.si_handler.meta[key].get('sdate')
-            key_dict['sharkint_surface'] = self.si_handler.get_station_data(key_dict['station'])
-            try:
-                key_dict['sharkint_profile'] = self.si_handler.get_key_data(key)
-                # key_dict['station'] = key_dict['sharkint_profile']['STATN'].iloc[0]
-                # key_dict['datetime'] = key_dict['sharkint_profile']['datetime'].iloc[0]
-                # key_dict['sdate'] = key_dict['datetime'].strftime('%Y-%m-%d')
-            except IndexError:
-                key_dict['sharkint_profile'] = None
+            if self.lims_handler:
+                key_dict['station'] = self.lims_handler.meta[key].get('station')
+                key_dict['datetime'] = self.lims_handler.meta[key].get('datetime')
+                key_dict['sdate'] = self.lims_handler.meta[key].get('sdate')
+                try:
+                    key_dict['sharkint_profile'] = self.lims_handler.get_key_data(key)
+                    # key_dict['station'] = key_dict['sharkint_profile']['STATN'].iloc[0]
+                    # key_dict['datetime'] = key_dict['sharkint_profile']['datetime'].iloc[0]
+                    # key_dict['sdate'] = key_dict['datetime'].strftime('%Y-%m-%d')
+                except IndexError:
+                    key_dict['sharkint_profile'] = None
+            else:
+                key_dict['station'] = self.archive_handler.meta[key].get('station')
+                key_dict['datetime'] = self.archive_handler.meta[key].get('datetime')
+                key_dict['sdate'] = self.archive_handler.meta[key].get('sdate')
+                try:
+                    key_dict['sharkint_profile'] = self.archive_handler.get_key_data(key)
+                    # key_dict['station'] = key_dict['sharkint_profile']['STATN'].iloc[0]
+                    # key_dict['datetime'] = key_dict['sharkint_profile']['datetime'].iloc[0]
+                    # key_dict['sdate'] = key_dict['datetime'].strftime('%Y-%m-%d')
+                except IndexError:
+                    key_dict['sharkint_profile'] = None
+
+            lims_surface = self.lims_handler.get_station_data(key_dict['station'])
+            archive_surface = self.archive_handler.get_station_data(key_dict['station'])
+            surface = lims_surface.append(archive_surface)
+            key_dict['sharkint_surface'] = surface.sort_values('timestamp')
+            # key_dict['sharkint_surface'] = self.archive_handler.get_station_data(key_dict['station'])
 
             self.data_dict[key] = key_dict
 
@@ -520,9 +543,11 @@ class DataHandler(object):
                 if statn == 'BY39 ÖLANDS S UDDE':
                     continue
                 try:
+                    print(f'{self.archive_handler.get_station_data(statn)=}')
+                    print(f'{self.lims_handler.get_station_data(statn)=}')
                     stat_data = stat_obj.get_hi_lo_std(statn, 'CHLA', current_year=current_year)
                     self.data_dict[statn] = {'statistics': stat_obj.get_interpolated_data(stat_data),
-                                             'sharkint_surface': self.si_handler.get_station_data(statn)}
+                                             'sharkint_surface': self.archive_handler.get_station_data(statn)}
                 except AttributeError:
                     logger.warning(f'Could not get statistics for station: {statn}')
 
