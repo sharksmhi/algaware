@@ -27,10 +27,10 @@ with open(pathlib.Path(root, 'requirements.txt')) as fh:
 
 setuptools.setup(
     name="algaware",
-    version="0.3.0",
+    version="0.3.1",
     author="Johannes Johansson",
     author_email="magnus.wenzer@smhi.se",
-    description="No able to specify archive root directory",
+    description="",
     long_description=long_description(),
     long_description_content_type="text/markdown",
     url="https://github.com/sharksmhi/algaware",
