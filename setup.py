@@ -17,7 +17,7 @@ def long_description():
         return 'No readme file'
 
 
-root = pathlib.Path(__file__).parent.resolve()
+root_path = pathlib.Path(__file__).parent.resolve()
 
 requirements = []
 with open(pathlib.Path(root_path, 'requirements.txt')) as fh:
