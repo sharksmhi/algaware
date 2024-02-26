@@ -5,7 +5,10 @@ Created on Thu Jul 05 10:29:30 2018
 @author: a002028
 """
 import os
-import utils
+try:
+    import utils
+except:
+    from ..core import utils
 import numpy as np
 import yaml
 

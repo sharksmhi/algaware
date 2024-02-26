@@ -23,7 +23,7 @@ def get_interpolated_df(df, x_key, y_key):
         x = df[x_key].astype(np.int64)
     else:
         x = df[x_key]
-    i_x, i_y = interpolate_array(x.values, df[y_key].astype(np.float).values)
+    i_x, i_y = interpolate_array(x.values, df[y_key].astype(float).values)
     out_df = pd.DataFrame({'x': i_x, 'y': i_y})
     if x_key == 'timestamp':
         out_df['x'] = out_df['x'].astype(np.int64).apply(pd.Timestamp)

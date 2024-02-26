@@ -79,8 +79,7 @@ class CTDDataHandler(object):
         for fid in self.data.keys():
             myear = str(ctdpy.core.utils.get_timestamp(self.data[fid]['metadata'].get('SDATE')).year)
             shipc = self.ctd_session.settings.smap.map_shipc(self.data[fid]['metadata'].get('SHIPC'))
-            serno = self.data[fid]['metadata'].get('SERNO')
-
+            serno = self.data[fid]['metadata'].get('SERNO').zfill(4)
             if shipc == '77SE Svea':
                 shipc = '77SE'
 
@@ -318,12 +317,12 @@ class LIMSDataHandler(MeanDataBooleanBase):
         """
         if keys is None:
             keys = ['MYEAR', 'SHIPC', 'SERNO']
+        self.data['SERNO'] = self.data['SERNO'].apply(lambda x: x.zfill(4))
         self.data['key'] = self.data[keys].apply(lambda x: '_'.join(x), axis=1)
 
         self.reset_boolean()
         self.add_boolean_greater_or_equal('timestamp', self.start_time)
         self.add_boolean_less_or_equal('timestamp', self.end_time)
-        pass
         self.session_key_list = self.data.loc[self.boolean, 'key']
 
     def set_timestamp(self, key, fmt='%Y'):
